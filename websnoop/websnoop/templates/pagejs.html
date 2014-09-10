@@ -1,90 +1,17 @@
+// The script tag starts in inputvalidations.html
 
-<script type="text/javascript" src="/media/static/js/prototype.js"></script>
-<script type='text/javascript'>
 function goSnoop(){
     if(!validateinputs()){
       return false;
     }
     var message = "<b><font color='#0000AA'>We are looking up the object of your quest. This might take a while <br>(depending on the amount of data it has to process in order to gather the information regarding the object of your quest). <br>Please be patient during this process. </font></b>";
-    document.getElementById("startproc").innerHTML = "<center><span width='75%'><input type='button' name='btnsnoop' value='Snooping...' onClick='javascript:generateReport();'><img src='/media/static/img/loadingimage.gif'><br>" + message + "</span></center><br>" ;
+    document.getElementById("startproc").innerHTML = "<center><span width='75%'><input type='button' name='btnsnoop' value='Snooping...' onClick='javascript:goSnoop();'><img src='/media/static/img/loadingimage.gif'><br>" + message + "</span></center><br>" ;
     document.getElementById("loading2").innerHTML = "";
     document.getElementById("content2").innerHTML = "";
     return(true);
 }
 
 
-// Get publisher name as input for publisherwise transaction history generation.
-function getPubwiseTxnInput(){
-    var publishersnameliststr = "{{ pubnamesliststr }}";
-    var publishersidliststr = "{{ pubidsliststr }}";
-    var selectedPublisherId = "{{ selectedPublisher }}";
-    var publishernameslist = publishersnameliststr.split("|");
-    var publisheridslist = publishersidliststr.split("|");
-    if (document.frmreport.reporttype.value == "PublisherwiseTransactionsReport"){
-	pubwiseHtml = "<br />&nbsp;<select name='publisher'><option value='' defaultSelected>Select Publisher</option>";
-        for(var i=0; i < publishernameslist.length; i++){
-            if(selectedPublisherId == publisheridslist[i]){
-                pubwiseHtml += "<option value='" + publisheridslist[i] + "' selected>" + publishernameslist[i] + "</option>";
-            }
-            else{
-                pubwiseHtml += "<option value='" + publisheridslist[i] + "'>" + publishernameslist[i] + "</option>";
-            }
-        }
-        pubwiseHtml += "</select>";
-        document.getElementById('pubwise').innerHTML = pubwiseHtml;
-    }
-    else{
-        document.getElementById('pubwise').innerHTML = "";
-    }
-}
-
-// Function to make requests to the web server periodically, to check if the task responsible for the report has ended.
-(function pollTaskStatus(){
-	setTimeout(function(){
-	csrftoken = document.frmreport.csrfmiddlewaretoken.value;
-	taskuuid = document.frmreport.taskuuid.value;
-	if (!taskuuid){
-	    exit();
-	}
-      	new Ajax.Request('/analytics/misreports/?csrfmiddlewaretoken=' + csrftoken + '&taskuuid=' + taskuuid + "&reporttype=" + document.frmreport.reporttype.value, {
-  		method:'get',
-  		onSuccess: function(transport) {
-    		var response = transport.responseText;
-		ndx = response.search(/^SUCCESS#/);
-		if(ndx >= 0){ // Job has completed successfully.
-			var responseparts = response.split(/#/);
-			status = responseparts[0];
-			outfilename = responseparts[1];
-			//alert(outfilename);
-			document.frmreport.generate.disabled = false;
-			document.frmreport.reporttype.disabled = false;
-			document.frmreport.fromdate.disabled = false;
-			document.frmreport.todate.disabled = false;
-			if(responseparts[1] == 'HTML'){ // this is the AggregatedCounts report
-				document.getElementById('loading2').innerHTML = "<center><b><font color='#00FF00'>Aggregated Counts Report for Period Ranging from " + document.frmreport.fromdate.value + " to " + document.frmreport.todate.value + " is being rendered .</font></b></center>";
-				document.getElementById("startproc").innerHTML = "<center><span width='75%'><input type='button' name='generate' value='Generate Report' onClick='javascript:generateReport();'></span></center><br />";
-				reportHtml = "";
-				for(var i=2; i < responseparts.length; i++){
-					reportHtml = reportHtml + responseparts[i]
-				}
-				document.getElementById("content2").innerHTML = reportHtml;
-				exit(0);
-			}
-			document.getElementById('loading2').innerHTML = "<center><b><font color='#00FF00'>Your report has been generated.</font></b></center>";
-			document.getElementById('content2').innerHTML = "<center><font color='#00FF00''> Download your report <a href='/analytics/misreports/download/?outfilename=" + outfilename + "'>here</a></font></center>";
-			document.getElementById("startproc").innerHTML = "<center><span width='75%'><input type='button' name='generate' value='Generate Report' onClick='javascript:generateReport();'></span></center><br>";
-			document.getElementById('tstate').innerHTML = "";
-			document.frmreport.taskuuid.value = ""; // This task need not be monitored any more
-			exit(0);
-		}
-		else{
-			document.getElementById('tstate').innerHTML = response;
-		}
-  		},
-  		onFailure: function() { alert('Something went wrong...'); document.getElementById('tstate').innerHTML = 'ERROR'; exit(1); }
-	});
-	pollTaskStatus();
-  	}, 30000);
-})();
-
 </script>
+<script type="text/javascript" src="/static/js/prototype.js"></script>
+

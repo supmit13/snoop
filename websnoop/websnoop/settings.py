@@ -57,10 +57,19 @@ WSGI_APPLICATION = 'websnoop.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'snoopdb',
+        'USER': 'root',
+        'PASSWORD' : 'Welcome@1',
+        'HOST' : 'localhost',
     }
 }
+
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    #'django.contrib.staticfiles.finders.DefaultStorageFinder',
+)
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
