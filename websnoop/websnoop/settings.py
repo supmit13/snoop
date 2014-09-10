@@ -83,4 +83,6 @@ STATIC_URL = '/static/'
 
 GEOIP_PATH = BASE_DIR + os.path.sep + "GeoIP" + os.path.sep + "GeoLiteCity.dat"
 
-
+TEMPLATE_DIRS = (
+    BASE_DIR + os.path.sep + 'websnoop' + os.path.sep,
+)

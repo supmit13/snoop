@@ -13,7 +13,10 @@ def getGeolocationFromIP(ipaddr):
     g = GeoIP()
     request_src  = g.city(ipaddr)
     logRequest(request_src)
-    return (request_src['city'], request_src['country_name'])
+    try:
+        return (request_src['city'], request_src['country_name'])
+    except:
+        return (None, None)
 
 
 """
@@ -37,14 +40,14 @@ def pageheader(title, uname='guest'):
     Utility routine to write the header part of the web interface.
     """
     t = get_template("templates/pageheader.html")
-    page = pagejs(selectedpubid)
+    page = pagejs()
     cachecontrolhtml = cachecontrolheaders()
     bootstraphtml = bootstrapincludes()
     htmlcontent = t.render(Context({'title' : title, 'pagejs' : page, 'cachecontrolhtml' : cachecontrolhtml, 'bootstraphtml' : bootstraphtml, 'username' : uname }))
     return(htmlcontent)
 
 
-def pagejs(selectedpubid=""):
+def pagejs():
     """
     Utility routine to handle the javascript and prototype.js activities.
     It gathers the inputs and makes prototype.js based ajax calls to the
