@@ -55,7 +55,56 @@
             alert("Please enter entity description.");
             return(false);
           }
-          
+	  document.inputform.phonenumbers.value = trim(document.inputform.phonenumbers.value);
+          if (document.inputform.phonenumbers.value != "" && !phonePattern.test(document.inputform.phonenumbers.value)){
+	    alert("Phone numbers must be a list of 10-12 digit numbers");
+	    return(false);
+	  }
+	  document.inputform.emailids.value = trim(document.inputform.emailids.value);
+	  if (document.inputform.emailids.value != "" && !emailPattern.test(document.inputform.emailids.value)){
+	    alert("Email Ids should be a list (may be a single element one) of strings having an '@' character and a '.' character");
+	    return(false);
+	  }
+	  document.inputform.facebookhandles.value = trim(document.inputform.facebookhandles.value);
+	  if (document.inputform.facebookhandles.value != "" && !facebookPattern.test(document.inputform.facebookhandles.value)){
+	    alert("Facebook handles should be a string without spaces and may contain a '@' and '.' character");
+	    return(false);
+	  }
+	  document.inputform.linkedinhandles.value = trim(document.inputform.linkedinhandles.value);
+	  if (document.inputform.linkedinhandles.value != "" && !linkedinPattern.test(document.inputform.linkedinhandles.value)){
+	    alert("Linkedin handles may be a string with no whitespaces and can optionally contain the '@' and '.' characters");
+	    return(false);
+	  }
+	  document.inputform.googleplushandles.value = trim(document.inputform.googleplushandles.value);
+	  if (document.inputform.googleplushandles.value != "" && !googleplusPattern.test(document.inputform.googleplushandles.value)){
+	    alert("Google Plus handles should be a non-whitespace string");
+	    return(false);
+	  }
+	  document.inputform.twitterhashtags.value = trim(document.inputform.twitterhashtags.value);
+	  if (document.inputform.twitterhashtags.value != "" && !twitterPattern.test(document.inputform.twitterhashtags.value)){
+	    alert("Twitter hashtags should be strings containing alphabets, digits and '#' character");
+  	    return(false);
+	  }
+	  document.inputform.entitydob.value = trim(document.inputform.entitydob.value);
+	  if (document.inputform.entitydob.value != "" && !dobPattern.test(document.inputform.entitydob.value)){
+	    alert("Date of birth should be of the form 'dd-mm-yyyy'");
+	    return(false);
+	  }
+	  document.inputform.frontimage.value = trim(document.inputform.frontimage.value);
+	  if (document.inputform.frontimage.value != "" && !imagePattern.test(document.inputform.frontimage.value)){
+	    alert("Invalid front image format/extension");
+	    return(false);
+	  }
+	  document.inputform.profileimage.value = trim(document.inputform.profileimage.value);
+	  if (document.inputform.profileimage.value != "" && !imagePattern.test(document.inputform.profileimage.value)){
+	    alert("Invalid profile image format/extension");
+	    return(false);
+	  }
+	  document.inputform.elevationimage.value = trim(document.inputform.elevationimage.value);
+	  if (document.inputform.elevationimage.value != "" && !imagePattern.test(document.inputform.elevationimage.value)){
+	    alert("Invalid elevation image format/extension");
+	    return(false);
+	  }
           return(true);
         }
 </script>
