@@ -1,0 +1,61 @@
+<script type='text/javascript'>
+
+        function trim(s){ 
+          return ( s || '' ).replace( /^\s+|\s+$/g, '' ); 
+        }
+        
+	
+	// The function implemented below will check for the valid values of all required fields. The
+	// list of required field names are: entityname (text field), permanentaddress (multi-line
+	// text field), identificationdetail (multi-line text), searchcities (multi-line text), searchcountries
+	// (text field), and entitydescription (multi-line text field). Additionally, it will check for
+	// valid values for the following fields: phonenumbers (should contain 12 digit numbers, optionally
+	// separated by commas), emailids (should contain the '@' symbol, optionally separated by commas), 
+	// facebookhandles, linkedinhandles, googleplushandles (should have no whitespace character, may 
+	// contain '@'), twitterhashtags (should contain '#' character, no whitespaces), entitydob (should be
+	// in the form 'dd-mm-yyyy' format), and the image upload fields frontimage, profileimage and 
+	// elevationimage (should have .gif, .jpeg, .png, .jpg, .svg, .tif(f) or .bmp file extensions only).
+        function validateinputs(){
+          var emailPattern = new RegExp("[\w\.\-_]*@[\w\.]+\,?");
+	  var phonePattern = new RegExp("\d{10,12}\,?");
+	  var facebookPattern = new RegExp("[\w\.\-_]*@?[\w\.]*\,?");
+	  var linkedinPattern = new RegExp("[\w\.\-_]*@?[\w\.]*\,?");
+	  var googleplusPattern = new RegExp("\w+"\,?);
+	  var twitterPattern = new RegExp("^#\w+");
+	  var dobPattern = new RegExp("^\d{1,2}\-\d{1,2}\-\d{4}$");
+	  var imagePattern = new RegExp("\w+\.(gif|jpeg|jpg|png|bmp|tif|svg)$");
+
+	  document.inputform.entityname.value = trim(document.inputform.entityname.value);
+	  if (document.inputform.entityname.value == ""){
+            alert("Please enter a valid entity name.");
+            return(false);
+          }
+	  document.inputform.permanentaddress.value = trim(document.inputform.permanentaddress.value);
+	  if (document.inputform.permanentaddress.value == ""){
+            alert("Please enter a permanent address value.");
+            return(false);
+          }
+	  document.inputform.identificationdetail.value = trim(document.inputform.identificationdetail.value);
+	  if (document.inputform.identificationdetail.value == ""){
+            alert("Please enter a identification mark.");
+            return(false);
+          }
+	  document.inputform.searchcities.value = trim(document.inputform.searchcities.value);
+	  if (document.inputform.searchcities.value == ""){
+            alert("Please enter cities to search in.");
+            return(false);
+          }
+	  document.inputform.searchcountries.value = trim(document.inputform.searchcountries.value);
+	  if (document.inputform.searchcountries.value == ""){
+            alert("Please enter countries to search in.");
+            return(false);
+          }
+	  document.inputform.entitydescription.value = trim(document.inputform.entitydescription.value);
+	  if (document.inputform.entitydescription.value == ""){
+            alert("Please enter entity description.");
+            return(false);
+          }
+          
+          return(true);
+        }
+</script>

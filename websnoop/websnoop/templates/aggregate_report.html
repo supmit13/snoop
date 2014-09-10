@@ -1,0 +1,124 @@
+{% load template_dict %}
+
+
+
+<p><br /></p>
+    <div width="90%">
+    <center><h2>Aggregated Numbers for the Period {{ startDate }} to {{endDate}}</h2></center>
+        </br>
+        <p>
+            <center><span>
+                <table width="60%" border="1" style="background-color:#C2C2D6">
+                    <tr>
+                        <td align="right" width="30%"><strong><font color="#000099">Total Books Available:</font>&nbsp;&nbsp;</strong></td><td align="center"><strong><font color="#000099">{{totalBooksAvailable}}</font></strong></td>
+                    </tr>
+                    <tr>
+                        <td align="right" width="30%"><strong><font color="#000099">Total Magazines Available:</font>&nbsp;&nbsp;</strong></td><td align="center"><strong><font color="#000099">{{totalMagazinesAvailable}}</font></strong></td>
+                    </tr>
+                    <tr>
+                        <td align="right" colspan="2">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td align="right" width="30%"><strong><font color="#000099">Total Books Bought:</font>&nbsp;&nbsp;</strong></td><td align="center"><strong><font color="#000099">{{totalBooksBought}}</font></strong></td>
+                    </tr>
+                    <tr>
+                        <td align="right" width="30%"><strong><font color="#000099">Total Magazines Bought:</font>&nbsp;&nbsp;</strong></td><td align="center"><strong><font color="#000099">{{totalMagazinesBought}}</font></strong></td>
+                    </tr>
+                </table>
+            </span></center>
+        </p>
+        <p>
+            <center><span>
+            <table border="1" width="60%" border="1" style="background-color:#C2C2D6">
+                <tr>
+                    <td align="center" width="30%">&nbsp;</td><td align="center"><strong><font color="#000099">ANDROID</font></strong></td><td align="center"><strong><font color="#000099">IOS</font></strong></td><td align="center"><strong><font color="#000099">WINDOWS</font></strong></td>
+                </tr>
+                <tr>
+                    <td width="30%" align="center"><font color="#000099"><strong>Total Paid Books Downloaded</strong></font></td><td align="center"><strong><font color="#000099">{{totalPaidBooksDownloadedAndroid}}</font></strong></td><td align="center"><strong><font color="#000099">{{totalPaidBooksDownloadedIOS}}</font></strong></td><td align="center"><strong><font color="#000099">{{totalPaidBooksDownloadedWindows}}</font></strong></td>
+                </tr>
+                <tr>
+                    <td width="30%" align="center"><font color="#000099"><strong>Total Paid Magazines Downloaded</strong></font></td><td align="center"><strong><font color="#000099">{{totalPaidMagazinesDownloadedAndroid}}</font></strong></td><td align="center"><strong><font color="#000099">{{totalPaidMagazinesDownloadedIOS}}</font></strong></td><td align="center"><strong><font color="#000099">{{totalPaidMagazinesDownloadedWindows}}</font></strong></td>
+                </tr>
+                <tr>
+                    <td width="30%" align="center"><font color="#000099"><strong>Cumulative Total</strong></font></td><td align="center"><strong><font color="#000099">{{cumulativeDownloadsAndroid}}</font></strong></td><td align="center"><strong><font color="#000099">{{cumulativeDownloadsIOS}}</font></strong></td><td align="center"><strong><font color="#000099">{{cumulativeDownloadsWindows}}</font></strong></td>
+                </tr>
+            </table>
+            </span></center>
+        </p>
+        <p>
+            <center><span>
+                <h3><font color="#000099">Download Sizes (in Mega Bytes)</font></h3><br />
+                <table border="1" width="60%" style="background-color:#C2C2D6">
+                    <tr>
+                        <td width="30%" align="center">&nbsp;</td><td align="center"><strong><font color="#000099">ANDROID</font></strong></td><td align="center"><strong><font color="#000099">IOS</font></strong></td><td align="center"><strong><font color="#000099">WINDOWS</font></strong></td>
+                    </tr>
+                    <tr>
+                        <td width="30%" align="center"><strong><font color="#000099">Free Books Download Size</font></strong></td><td align="center"><strong><font color="#000099">{{totalFreeBooksDownloadedSizeAndroid}}</font></strong></td><td align="center"><strong><font color="#000099">{{totalFreeBooksDownloadedSizeIOS}}</font></strong></td><td align="center"><strong><font color="#000099">{{totalFreeBooksDownloadedSizeWindows}}</font></strong></td>
+                    </tr>
+                    <tr>
+                        <td width="30%" align="center"><strong><font color="#000099">Paid Books Download Size</font></strong></td><td align="center"><strong><font color="#000099">{{totalPaidBooksDownloadedSizeAndroid}}</font></strong></td><td align="center"><strong><font color="#000099"><font color="#000099">{{totalPaidBooksDownloadedSizeIOS}}</font></strong></td><td align="center"><strong><font color="#000099">{{totalPaidBooksDownloadedSizeWindows}}</font></strong></td>
+                    </tr>
+                </table>
+            </span></center>
+        </p>
+        <p>
+            <center><span>
+                <h3><font color="#000099">Transaction Data - Daily Paid Books Downloaded</font></h3><br />
+                    <table border="1" width="70%" style="background-color:#C2C2D6">
+                        <tr>
+                            <td width="30%" align="center"><strong><font color="#000099">Date</font></strong></td><td align="center"><strong><font color="#000099">ANDROID</font></strong></td><td align="center"><strong><font color="#000099">IOS</font></strong></td><td align="center"><strong><font color="#000099">WINDOWS</font></strong></td>
+                        </tr>
+                        {%  for dt in datesPaidBooksDownloaded  %}
+                        <tr>
+                            <td width="30%" align="center"><strong><font color="#000099">{{ dt }}</font></strong></td><td align="center"><strong><font color="#000099">{{dailyPaidBooksDownloadedAndroid|tempdict:dt}}</font></strong></td><td align="center"><strong><font color="#000099">{{dailyPaidBooksDownloadedIOS|tempdict:dt}}</font></strong></td><td align="center"><strong><font color="#000099">{{dailyPaidBooksDownloadedWindows|tempdict:dt}}</font></strong></td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+            </span></center>
+        </p>
+        <p>
+            <center><span>
+                <h3><font color="#000099">Transaction Data - Daily Paid Magazines Downloaded</font></h3><br />
+                    <table border="1" width="70%" style="background-color:#C2C2D6">
+                        <tr>
+                            <td width="30%" align="center"><strong><font color="#000099">Date</font></strong></td><td align="center"><strong><font color="#000099">ANDROID</font></strong></td><td align="center"><strong><font color="#000099">IOS</font></strong></td><td align="center"><strong><font color="#000099">WINDOWS</font></strong></td>
+                        </tr>
+                        {%  for dt in datesPaidMagazinesDownloaded  %}
+                        <tr>
+                            <td width="30%" align="center"><strong><font color="#000099">{{ dt }}</font></strong></td><td align="center"><strong><font color="#000099">{{dailyPaidMagazinesDownloadedAndroid|tempdict:dt}}</font></strong></td><td align="center"><strong><font color="#000099">{{dailyPaidMagazinesDownloadedIOS|tempdict:dt}}</font></strong></td><td align="center"><strong><font color="#000099">{{dailyPaidMagazinesDownloadedWindows|tempdict:dt}}</font></strong></td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+            </span></center>
+        </p>
+        <p>
+            <center><span>
+                <h3><font color="#000099">Transaction Data - Daily Free Books Downloaded</font></h3><br />
+                    <table border="1" width="70%" style="background-color:#C2C2D6">
+                        <tr>
+                            <td width="30%" align="center"><strong><font color="#000099">Date</font></strong></td><td align="center"><strong><font color="#000099">ANDROID</font></strong></td><td align="center"><strong><font color="#000099">IOS</font></strong></td><td align="center"><strong><font color="#000099">WINDOWS</font></strong></td>
+                        </tr>
+                        {%  for dt in datesFreeBooksDownloaded  %}
+                        <tr>
+                            <td width="30%" align="center"><strong><font color="#000099">{{ dt }}</font></strong></td><td align="center"><strong><font color="#000099">{{dailyFreeBooksDownloadedAndroid|tempdict:dt}}</font></strong></td><td align="center"><strong><font color="#000099">{{dailyFreeBooksDownloadedIOS|tempdict:dt}}</font></strong></td><td align="center"><strong><font color="#000099">{{dailyFreeBooksDownloadedWindows|tempdict:dt}}</font></strong></td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+            </span></center>
+        </p>
+        <p>
+            <center><span>
+                <h3><font color="#000099">Transaction Data - Daily Free Magazines Downloaded</font></h3><br />
+                    <table border="1" width="70%" style="background-color:#C2C2D6">
+                        <tr>
+                            <td width="30%" align="center"><strong><font color="#000099">Date</font></strong></td><td align="center"><strong><font color="#000099">ANDROID</font></strong></td><td align="center"><strong><font color="#000099">IOS</font></strong></td><td align="center"><strong><font color="#000099">WINDOWS</font></strong></td>
+                        </tr>
+                        {%  for dt in datesFreeMagazinesDownloaded  %}
+                        <tr>
+                            <td width="30%" align="center"><strong><font color="#000099">{{ dt }}</font></strong></td><td align="center"><strong><font color="#000099">{{dailyFreeMagazinesDownloadedAndroid|tempdict:dt}}</font></strong></td><td align="center"><strong><font color="#000099">{{dailyFreeMagazinesDownloadedIOS|tempdict:dt}}</font></strong></td><td align="center"><strong><font color="#000099">{{dailyFreeMagazinesDownloadedWindows|tempdict:dt}}</font></strong></td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+            </span></center>
+        </p>
+        </div>

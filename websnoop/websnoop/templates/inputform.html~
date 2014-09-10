@@ -1,0 +1,36 @@
+<div align='center'><center>
+<form name='inputform' method='POST' action='/snoop/getpages/'>
+<table border=0 cellpadding='3'>
+    <tr><td nowrap><b><font color='#000011'>Entity's (Person or Establishment, required) Name: </font></b></td><td nowrap><input type='text' name='entityname'></td></tr>
+    <tr><td nowrap><b><font color='#000011'>Last Observed in Area:</b><br>(neighborhood, optional)</font></td><td nowrap><textarea rows='2' cols='8' name='neighborhood'></td></tr>
+    <tr><td nowrap><b><font color='#000011'>Permanent Address :<br>(or Location of Establishment, required)</font></b></td><td nowrap><textarea name='permanentaddress' rows='4' cols='8'></td></tr>
+    <tr><td nowrap><b><font color='#000011'>Identification Mark :<br> (or any other identificable detail, required)</font></b></td><td nowrap><input type='text' name='identificationdetail' value=''></td></tr>
+    <tr><td nowrap><b><font color='#000011'>Cit(y/ies) to Search<br />(comma separated list in case &gt; 1, required) :</font></b></td><td nowrap><textarea name='searchcities' rows='4' cols='8'></td></tr>
+    <tr><td nowrap><b><font color='#000011'>Countr(y/ies) to Search :<br />(comma separated list in case &gt; 1, required) </font></b></td><td nowrap><input type='text' name='searchcountries' value=''></td></tr>
+    <tr><td nowrap><b><font color='#000011'>Area(s) or Locality to Search :<br />(optional) </font></b></td><td nowrap><textarea value='' name='searchlocality' value=''></td></tr>
+    <tr><td nowrap><b><font color='#000011'>Major Event/Incident associated with the Entity :<br />(optional, but necessary for a meaningful lookup) </font></b></td><td nowrap><textarea value='' name='associatedevent' value=''></td></tr>
+    <tr><td nowrap><b><font color='#000011'>Date/Period of the Above Event :<br />(in the format 'Day' 'Monthname' 'Year', optional) </font></b></td><td nowrap><textarea value='' name='eventperiod' value=''></td></tr>
+    <tr><td nowrap><b><font color='#000011'>Place of the Above Event :<br />(optional) </font></b></td><td nowrap><input type='text' name='eventplace' value=''></td></tr>
+    <tr><td nowrap><b><font color='#000011'>Description of the Entity's Appearance :<br />(in free form text, required) </font></b></td><td nowrap><textarea name='entitydescription' value=''></td></tr>
+    <tr><td nowrap><b><font color='#000011'>Date of Birth/Foundation/Commission of the Entity :<br />(in 'dd-mm-yyyy' form, optional) </font></b></td><td nowrap><input type='text' name='entitydob' value=''></td></tr>
+    <tr><td nowrap><b><font color='#000011'>Occupation/Purpose of the Entity's Existence :<br />(optional) </font></b></td><td nowrap><input type='text' name='occupation' value=''></td></tr>
+    <tr><td nowrap><b><font color='#000011'>Email Id(s) :<br />(comma separated list if &gt; 1, optional, but requested) </font></b></td><td nowrap><textarea name='emailids' value=''></td></tr>
+    <tr><td nowrap><b><font color='#000011'>Telephone/Mobile Numbers(s) :<br />(comma separated list if &gt; 1, optional, but requested) </font></b></td><td nowrap><textarea name='phonenumbers' value=''></td></tr>
+    <tr><td nowrap><b><font color='#000011'>Website(s)/URL(s) where information regarding this entity <br />might be available(comma separated list if &gt; 1, optional, but requested) </font></b></td><td nowrap><textarea name='websiteurls' value=''></td></tr>
+    <tr><td nowrap><b><font color='#000011'>Facebook Handle(s) or Page(s) <br />(comma separated list if &gt; 1, optional, but requested if applicable) </font></b></td><td nowrap><input type='text' name='facebookhandles' value=''></td></tr>
+    <tr><td nowrap><b><font color='#000011'>LinkedIn Handle(s)/Group(s) <br />(comma separated list if &gt; 1, optional, but requested if applicable) </font></b></td><td nowrap><input type='text' name='linkedinhandles' value=''></td></tr>
+    <tr><td nowrap><b><font color='#000011'>Twitter Hashtag(s) <br />(comma separated list if &gt; 1, optional, but requested if applicable) </font></b></td><td nowrap><input type='text' name='twitterhashtags' value=''></td></tr>
+    <tr><td nowrap><b><font color='#000011'>Google+ Handle(s) <br />(comma separated list if &gt; 1, optional, but requested if applicable) </font></b></td><td nowrap><input type='text' name='googleplushandles' value=''></td></tr>
+    <tr><td nowrap><b><font color='#000011'>Whatsapp Handle(s) <br />(comma separated list if &gt; 1, optional, but requested if applicable) </font></b></td><td nowrap><input type='text' name='whatsapphandles' value=''></td></tr>
+    <tr><td nowrap><b><font color='#000011'>Instagram Handle(s) <br />(comma separated list if &gt; 1, optional, but requested if applicable) </font></b></td><td nowrap><input type='text' name='instagramhandles' value=''></td></tr>
+    <tr><td nowrap><b><font color='#000011'>Any Other Social Network <br />(in the form 'handle@social.net.work', optional) </font></b></td><td nowrap><input type='text' name='socialnetworkhandle' value=''></td></tr>
+    <tr><td nowrap><b><font color='#000011'>Any Other URL(s) that might contain information <br />(one URL per line, optional) </font></b></td><td nowrap><input type='text' name='infourls' value=''></td></tr>
+    <tr><td nowrap><b><font color='#000011'>Upload Image #1 :<br />(Front View, optional) </font></b></td><td nowrap><input type='file' name='frontimage' value=''></td></tr>
+    <tr><td nowrap><b><font color='#000011'>Upload Image #2 :<br />(Profile View, optional) </font></b></td><td nowrap><input type='file' name='profileimage' value=''></td></tr>
+    <tr><td nowrap><b><font color='#000011'>Upload Image #3 :<br />(Elevation View, optional) </font></b></td><td nowrap><input type='file' name='elevationimage' value=''></td></tr>
+    <tr><td nowrap align='right' colspan=2><input type='hidden' name='csrfmiddlewaretoken' value='{{ csrftoken }}'><input type='hidden' name='loginsession' value='{{ loginsession }}'></td></tr>
+    <tr><td nowrap align='right'><input type='button' name='btnsnoop' value='Snoop In!'></td><td nowrap><input type='reset' name='btnreset' value='Reset'></td></tr>
+</table>
+</form>
+</center></div>
+

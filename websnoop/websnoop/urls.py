@@ -9,5 +9,7 @@ urlpatterns = patterns('',
     # url(r'^blog/', include('blog.urls')),
 
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^snoop/', 'websnoop.views.defaultHandler'),
+    url(r'^/$', 'websnoop.webforms.showFinderForm'),
+    url(r'^snoop/getpages/$', 'websnoop.webscrape.views.getPages'),
+    url(r'^snoop/$', 'websnoop.webscrape.views.getInputs'),
 )
