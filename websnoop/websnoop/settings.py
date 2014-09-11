@@ -89,6 +89,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR + os.path.sep + 'staticfiles'
+
+STATICFILES_DIRS = (
+    BASE_DIR + os.path.sep + "websnoop" + os.path.sep + "static",
+    )
 
 GEOIP_PATH = BASE_DIR + os.path.sep + "GeoIP" + os.path.sep + "GeoLiteCity.dat"
 

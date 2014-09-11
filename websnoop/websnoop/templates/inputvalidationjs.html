@@ -1,10 +1,11 @@
-<script type='text/javascript'>
+<Script type='text/javascript' src='/static/js/prototype.js'></script>
+<Script language='JavaScript'>
 
         function trim(s){ 
-          return ( s || '' ).replace( /^\s+|\s+$/g, '' ); 
+          return ( s || '' ).replace( /^\s+|\s+$/g, '' );
         }
         
-	
+
 	// The function implemented below will check for the valid values of all required fields. The
 	// list of required field names are: entityname (text field), permanentaddress (multi-line
 	// text field), identificationdetail (multi-line text), searchcities (multi-line text), searchcountries
@@ -15,15 +16,16 @@
 	// contain '@'), twitterhashtags (should contain '#' character, no whitespaces), entitydob (should be
 	// in the form 'dd-mm-yyyy' format), and the image upload fields frontimage, profileimage and 
 	// elevationimage (should have .gif, .jpeg, .png, .jpg, .svg, .tif(f) or .bmp file extensions only).
+
         function validateinputs(){
           var emailPattern = new RegExp("[\w\.\-_]*@[\w\.]+\,?");
 	  var phonePattern = new RegExp("\d{10,12}\,?");
 	  var facebookPattern = new RegExp("[\w\.\-_]*@?[\w\.]*\,?");
 	  var linkedinPattern = new RegExp("[\w\.\-_]*@?[\w\.]*\,?");
-	  var googleplusPattern = new RegExp("\w+"\,?);
+	  var googleplusPattern = new RegExp("\w+\,?");
 	  var twitterPattern = new RegExp("^#\w+");
 	  var dobPattern = new RegExp("^\d{1,2}\-\d{1,2}\-\d{4}$");
-	  var imagePattern = new RegExp("\w+\.(gif|jpeg|jpg|png|bmp|tif|svg)$");
+	  var imagePattern = new RegExp("\w+\.(gif|jpeg|jpg|png|bmp|tiff?|svg)$");
 
 	  document.inputform.entityname.value = trim(document.inputform.entityname.value);
 	  if (document.inputform.entityname.value == ""){
@@ -108,3 +110,4 @@
           return(true);
         }
 // The script tag ends in pagejs.html
+

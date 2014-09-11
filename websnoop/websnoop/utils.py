@@ -16,7 +16,7 @@ def getGeolocationFromIP(ipaddr):
     try:
         return (request_src['city'], request_src['country_name'])
     except:
-        return (None, None)
+        return ('', '')
 
 
 """

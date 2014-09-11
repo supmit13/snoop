@@ -1,17 +1,14 @@
-// The script tag starts in inputvalidations.html
+// The script tag starts in inputvalidationjs.html
 
 function goSnoop(){
     if(!validateinputs()){
-      return false;
+      return(false);
     }
-    var message = "<b><font color='#0000AA'>We are looking up the object of your quest. This might take a while <br>(depending on the amount of data it has to process in order to gather the information regarding the object of your quest). <br>Please be patient during this process. </font></b>";
-    document.getElementById("startproc").innerHTML = "<center><span width='75%'><input type='button' name='btnsnoop' value='Snooping...' onClick='javascript:goSnoop();'><img src='/media/static/img/loadingimage.gif'><br>" + message + "</span></center><br>" ;
-    document.getElementById("loading2").innerHTML = "";
-    document.getElementById("content2").innerHTML = "";
+    message = "<b><font color='#0000AA'>We are looking up the object of your quest. This might take a while <br>(depending on the amount of data it has to process in order to gather the information regarding the object of your quest). <br>Please be patient during this process. </font></b>";
+    document.getElementById("startproc").innerHTML = "<center><span width='75%'><input type='button' name='btnsnoop' value='Snooping...' onClick='javascript:goSnoop();'><img src='/static/img/loadingimage.gif'><br>" + message + "</span></center><br>";
     return(true);
 }
 
-
 </script>
-<script type="text/javascript" src="/static/js/prototype.js"></script>
+
 

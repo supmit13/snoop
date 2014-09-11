@@ -3,14 +3,14 @@
 <form name='inputform' method='POST'>
 <table border=0 cellpadding='3'>
     <tr><td nowrap><b><font color='#000011'>Entity's (Person or Establishment, required) Name: </font></b></td><td nowrap><input type='text' name='entityname'></td></tr>
-    <tr><td nowrap><b><font color='#000011'>Last Observed in Area:</b><br>(neighborhood, optional)</font></td><td nowrap><textarea rows='2' cols='8' name='neighborhood' value=''></textarea></td></tr>
+    <tr><td nowrap><b><font color='#000011'>Last Observed in Area:</b><br>(neighborhood, optional)</font></td><td nowrap><textarea rows='2' cols='8' name='neighborhood'></textarea></td></tr>
     <tr><td nowrap><b><font color='#000011'>Permanent Address :<br>(or Location of Establishment, required)</font></b></td><td nowrap><textarea name='permanentaddress' rows='4' cols='8'></textarea></td></tr>
     <tr><td nowrap><b><font color='#000011'>Identification Mark :<br> (or any other identificable detail, required)</font></b></td><td nowrap><input type='text' name='identificationdetail' value=''></td></tr>
     <tr><td nowrap><b><font color='#000011'>Cit(y/ies) to Search<br />(comma separated list in case &gt; 1, required) :</font></b></td><td nowrap><textarea name='searchcities' rows='4' cols='8'></textarea></td></tr>
     <tr><td nowrap><b><font color='#000011'>Countr(y/ies) to Search :<br />(comma separated list in case &gt; 1, required) </font></b></td><td nowrap><input type='text' name='searchcountries' value=''></td></tr>
-    <tr><td nowrap><b><font color='#000011'>Area(s) or Locality to Search :<br />(optional) </font></b></td><td nowrap><textarea value='' name='searchlocality' value=''></textarea></td></tr>
+    <tr><td nowrap><b><font color='#000011'>Area(s) or Locality to Search :<br />(optional) </font></b></td><td nowrap><textarea name='searchlocality'></textarea></td></tr>
     <tr><td nowrap><b><font color='#000011'>Major Event/Incident associated with the Entity :<br />(optional, but necessary for a meaningful lookup) </font></b></td><td nowrap><textarea value='' name='associatedevent'></textarea></td></tr>
-    <tr><td nowrap><b><font color='#000011'>Date/Period of the Above Event :<br />(in the format 'Day' 'Monthname' 'Year', optional) </font></b></td><td nowrap><textarea value='' name='eventperiod' value=''></textarea></td></tr>
+    <tr><td nowrap><b><font color='#000011'>Date/Period of the Above Event :<br />(in the format 'Day' 'Monthname' 'Year', optional) </font></b></td><td nowrap><textarea value='' name='eventperiod'></textarea></td></tr>
     <tr><td nowrap><b><font color='#000011'>Place of the Above Event :<br />(optional) </font></b></td><td nowrap><input type='text' name='eventplace' value=''></td></tr>
     <tr><td nowrap><b><font color='#000011'>Description of the Entity's Appearance :<br />(in free form text, required) </font></b></td><td nowrap><textarea name='entitydescription'></textarea></td></tr>
     <tr><td nowrap><b><font color='#000011'>Date of Birth/Foundation/Commission of the Entity :<br />(in 'dd-mm-yyyy' form, optional) </font></b></td><td nowrap><input type='text' name='entitydob' value=''></td></tr>
@@ -30,7 +30,7 @@
     <tr><td nowrap><b><font color='#000011'>Upload Image #2 :<br />(Profile View, optional) </font></b></td><td nowrap><input type='file' name='profileimage' value=''></td></tr>
     <tr><td nowrap><b><font color='#000011'>Upload Image #3 :<br />(Elevation View, optional) </font></b></td><td nowrap><input type='file' name='elevationimage' value=''></td></tr>
     <tr><td nowrap align='right' colspan=2><input type='hidden' name='csrfmiddlewaretoken' value='{{ csrftoken }}'><input type='hidden' name='loginsession' value='{{ loginsession }}'></td></tr>
-    <tr><td nowrap align='right'><div id='startproc'><input type='button' name='btnsnoop' value='Snoop In!' onClick='javascript:goSnoop();'></div></td><td nowrap><input type='reset' name='btnreset' value='Reset'></td></tr>
+    <tr><td nowrap align='right'><span id='startproc'><input type='button' name='btnsnoop' value='Snoop In!' onClick='javascript:validateinputs();'></span></td><td nowrap><input type='button' name='btnreset' value='Cancel'></td></tr>
 </table>
 </form>
 </center></div>
