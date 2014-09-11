@@ -51,9 +51,9 @@ function goSnoop(){
     targetquery['profileimage'] = document.inputform.profileimage.value;
     targetquery['elevationimage'] = document.inputform.elevationimage.value;
     // Make a POST request to upload the files - we might need to use better image matching facilities
-    new Ajax.UploadRequest('/snoop/saveimages/', targetquery['frontimage'], { onUpload: handleupload, onSuccess: handlesuccess, onFailure: handlefailure });
-    new Ajax.UploadRequest('/snoop/saveimages/', targetquery['profileimage'], { onUpload: handleupload, onSuccess: handlesuccess, onFailure: handlefailure });
-    new Ajax.UploadRequest('/snoop/saveimages/', targetquery['elevationimage'], { onUpload: handleupload, onSuccess: handlesuccess, onFailure: handlefailure });
+    new Ajax.Request('/snoop/saveimages/', { method: 'post', requestHeaders: {'Content-Type': "application/octet-stream",}, postBody: $('frontimage'), onSuccess: handlesuccess, onFailure: handlefailure });
+    new Ajax.Request('/snoop/saveimages/', { method: 'post', requestHeaders: {'Content-Type': "application/octet-stream",}, postBody: $('profileimage'), onSuccess: handlesuccess, onFailure: handlefailure });
+    new Ajax.Request('/snoop/saveimages/', { method: 'post', requestHeaders: {'Content-Type': "application/octet-stream",}, postBody: $('elevationimage'), onSuccess: handlesuccess, onFailure: handlefailure });
     // Finally, sessional and meta data for the operations
     targetquery['csrfmiddlewaretoken'] = document.inputform.csrfmiddlewaretoken.value;
     targetquery['loginsession'] = document.inputform.loginsession.value;
