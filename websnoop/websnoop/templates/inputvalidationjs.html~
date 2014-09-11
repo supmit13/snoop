@@ -1,4 +1,6 @@
 <Script type='text/javascript' src='/static/js/prototype.js'></script>
+<Script type='text/javascript' src='/static/js/crawlers.js'></script>
+<Script type='text/javascript' src='/static/js/scanners.js'></script>
 <Script language='JavaScript'>
 
         function trim(s){ 
@@ -25,36 +27,42 @@
 	  var googleplusPattern = new RegExp("\w+\,?");
 	  var twitterPattern = new RegExp("^#\w+");
 	  var dobPattern = new RegExp("^\d{1,2}\-\d{1,2}\-\d{4}$");
-	  var imagePattern = new RegExp("\w+\.(gif|jpeg|jpg|png|bmp|tiff?|svg)$");
+	  var imagePattern = new RegExp("\w+\.(gif)|(jpeg)|(jpg)|(png)|(bmp)|(tiff?)|(svg)$");
 
 	  document.inputform.entityname.value = trim(document.inputform.entityname.value);
 	  if (document.inputform.entityname.value == ""){
             alert("Please enter a valid entity name.");
+  	    document.inputform.entityname.focus();
             return(false);
           }
 	  document.inputform.permanentaddress.value = trim(document.inputform.permanentaddress.value);
 	  if (document.inputform.permanentaddress.value == ""){
             alert("Please enter a permanent address value.");
+	    document.inputform.permanentaddress.focus();
             return(false);
           }
 	  document.inputform.identificationdetail.value = trim(document.inputform.identificationdetail.value);
 	  if (document.inputform.identificationdetail.value == ""){
             alert("Please enter a identification mark.");
+  	    document.inputform.identificationdetail.focus();
             return(false);
           }
 	  document.inputform.searchcities.value = trim(document.inputform.searchcities.value);
 	  if (document.inputform.searchcities.value == ""){
             alert("Please enter cities to search in.");
+	    document.inputform.searchcities.focus();
             return(false);
           }
 	  document.inputform.searchcountries.value = trim(document.inputform.searchcountries.value);
 	  if (document.inputform.searchcountries.value == ""){
             alert("Please enter countries to search in.");
+	    document.inputform.searchcountries.focus();
             return(false);
           }
 	  document.inputform.entitydescription.value = trim(document.inputform.entitydescription.value);
 	  if (document.inputform.entitydescription.value == ""){
             alert("Please enter entity description.");
+	    document.inputform.entitydescription.focus();
             return(false);
           }
 	  document.inputform.phonenumbers.value = trim(document.inputform.phonenumbers.value);
@@ -92,17 +100,14 @@
 	    alert("Date of birth should be of the form 'dd-mm-yyyy'");
 	    return(false);
 	  }
-	  document.inputform.frontimage.value = trim(document.inputform.frontimage.value);
 	  if (document.inputform.frontimage.value != "" && !imagePattern.test(document.inputform.frontimage.value)){
 	    alert("Invalid front image format/extension");
 	    return(false);
 	  }
-	  document.inputform.profileimage.value = trim(document.inputform.profileimage.value);
 	  if (document.inputform.profileimage.value != "" && !imagePattern.test(document.inputform.profileimage.value)){
 	    alert("Invalid profile image format/extension");
 	    return(false);
 	  }
-	  document.inputform.elevationimage.value = trim(document.inputform.elevationimage.value);
 	  if (document.inputform.elevationimage.value != "" && !imagePattern.test(document.inputform.elevationimage.value)){
 	    alert("Invalid elevation image format/extension");
 	    return(false);

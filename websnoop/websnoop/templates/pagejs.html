@@ -6,6 +6,45 @@ function goSnoop(){
     }
     message = "<b><font color='#0000AA'>We are looking up the object of your quest. This might take a while <br>(depending on the amount of data it has to process in order to gather the information regarding the object of your quest). <br>Please be patient during this process. </font></b>";
     document.getElementById("startproc").innerHTML = "<center><span width='75%'><input type='button' name='btnsnoop' value='Snooping...' onClick='javascript:goSnoop();'><img src='/static/img/loadingimage.gif'><br>" + message + "</span></center><br>";
+
+    var targetquery = new Array();
+    targetquery['entityname'] = document.inputform.entityname.value;
+    targetquery['permanentaddress'] = document.inputform.permanentaddress.value;
+    targetquery['identificationdetail'] = document.inputform.identificationdetail.value;
+    targetquery['searchcities'] = document.inputform.searchcities.value;
+    targetquery['searchcountries'] = document.inputform.searchcountries.value;
+    targetquery['entitydescription'] = document.inputform.entitydescription.value;
+    // Values below are 'requested', comma separated list expected.
+    targetquery['emailids'] = document.inputform.emailids.value.split(",");
+    targetquery['phonenumbers'] = document.inputform.phonenumbers.value.split(",");
+    targetquery['websiteurls'] = document.inputform.websiteurls.value.split(",");
+    targetquery['facebookhandles'] = document.inputform.facebookhandles.value.split(",");
+    targetquery['linkedinhandles'] = document.inputform.linkedinhandles.value.split(",");
+    targetquery['twitterhashtags'] = document.inputform.twitterhashtags.value.split(",");
+    targetquery['googleplushandles'] = document.inputform.googleplushandles.value.split(",");
+    targetquery['whatsapphandles'] = document.inputform.whatsapphandles.value.split(",");
+    targetquery['instagramhandles'] = document.inputform.instagramhandles.value.split(",");
+    targetquery['socialnetworkhandle'] = document.inputform.socialnetworkhandle.value.split(",");
+    // Values below are optional fields.
+    targetquery['neighborhood'] = document.inputform.neighborhood.value;
+    targetquery['searchlocality'] = document.inputform.searchlocality.value;
+    targetquery['eventperiod'] = document.inputform.eventperiod.value;
+    targetquery['associatedevent'] = document.inputform.associatedevent.value;
+    targetquery['eventplace'] = document.inputform.eventplace.value;
+    targetquery['entitydob'] = document.inputform.entitydob.value;
+    targetquery['occupation'] = document.inputform.occupation.value;
+    targetquery['infourls'] = document.inputform.infourls.value;
+    // Image files
+    targetquery['frontimage'] = document.inputform.frontimage.value;
+    targetquery['profileimage'] = document.inputform.profileimage.value;
+    targetquery['elevationimage'] = document.inputform.elevationimage.value;
+    alert(targetquery['elevationimage']);
+    // Finally, sessional and meta data for the operations
+    targetquery['csrfmiddlewaretoken'] = document.inputform.csrfmiddlewaretoken.value;
+    targetquery['loginsession'] = document.inputform.loginsession.value;
+    // Fire the data grabbers now
+    textdata = crawl(targetquery);
+    visualdata = scan();
     return(true);
 }
 
