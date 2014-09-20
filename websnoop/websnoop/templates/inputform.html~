@@ -1,6 +1,6 @@
 <div align='center'><center>
 <!-- <form name='inputform' method='POST' action='/snoop/getpages/'> -->
-<form name='inputform' method='POST'>
+<form name='inputform' method='POST' enctype="multipart/form-data">
 <table border=0 cellpadding='3'>
     <tr><td nowrap><b><font color='#000011'>Entity's (Person or Establishment, required) Name: </font></b></td><td nowrap><input type='text' name='entityname'></td></tr>
     <tr><td nowrap><b><font color='#000011'>Last Observed in Area:</b><br>(neighborhood, optional)</font></td><td nowrap><textarea rows='2' cols='8' name='neighborhood'></textarea></td></tr>
@@ -13,7 +13,7 @@
     <tr><td nowrap><b><font color='#000011'>Date/Period of the Above Event :<br />(in the format 'Day' 'Monthname' 'Year', optional) </font></b></td><td nowrap><textarea value='' name='eventperiod'></textarea></td></tr>
     <tr><td nowrap><b><font color='#000011'>Place of the Above Event :<br />(optional) </font></b></td><td nowrap><input type='text' name='eventplace' value=''></td></tr>
     <tr><td nowrap><b><font color='#000011'>Description of the Entity's Appearance :<br />(in free form text, required) </font></b></td><td nowrap><textarea name='entitydescription'></textarea></td></tr>
-    <tr><td nowrap><b><font color='#000011'>Date of Birth/Foundation/Commission of the Entity :<br />(in 'dd-mm-yyyy' form, optional) </font></b></td><td nowrap><input type='text' name='entitydob' value=''></td></tr>
+    <tr><td nowrap><b><font color='#000011'>Date of Birth/Foundation/Commission of the Entity :<br />(in 'dd-mm-yyyy' form, optional) </font></b></td><td nowrap><input type='text' name='entitydob' id='entitydob' value='' onClick='javascript:'></td></tr>
     <tr><td nowrap><b><font color='#000011'>Occupation/Purpose of the Entity's Existence :<br />(optional) </font></b></td><td nowrap><input type='text' name='occupation' value=''></td></tr>
     <tr><td nowrap><b><font color='#000011'>Email Id(s) :<br />(comma separated list if &gt; 1, optional, but requested) </font></b></td><td nowrap><textarea name='emailids'></textarea></td></tr>
     <tr><td nowrap><b><font color='#000011'>Telephone/Mobile Numbers(s) :<br />(comma separated list if &gt; 1, optional, but requested) </font></b></td><td nowrap><textarea name='phonenumbers'></textarea></td></tr>
@@ -26,11 +26,12 @@
     <tr><td nowrap><b><font color='#000011'>Instagram Handle(s) <br />(comma separated list if &gt; 1, optional, but requested if applicable) </font></b></td><td nowrap><input type='text' name='instagramhandles' value=''></td></tr>
     <tr><td nowrap><b><font color='#000011'>Any Other Social Network <br />(in the form 'handle@social.net.work', optional) </font></b></td><td nowrap><input type='text' name='socialnetworkhandle' value=''></td></tr>
     <tr><td nowrap><b><font color='#000011'>Any Other URL(s) that might contain information <br />(one URL per line, optional) </font></b></td><td nowrap><input type='text' name='infourls' value=''></td></tr>
-    <tr><td nowrap><b><font color='#000011'>Upload Image #1 :<br />(Front View, optional) </font></b></td><td nowrap><input type='file' name='frontimage' value=''></td></tr>
-    <tr><td nowrap><b><font color='#000011'>Upload Image #2 :<br />(Profile View, optional) </font></b></td><td nowrap><input type='file' name='profileimage' value=''></td></tr>
-    <tr><td nowrap><b><font color='#000011'>Upload Image #3 :<br />(Elevation View, optional) </font></b></td><td nowrap><input type='file' name='elevationimage' value=''></td></tr>
+    <tr><td nowrap><b><font color='#000011'>Upload Image #1 :<br />(Front View, optional) </font></b></td><td nowrap><input type='file' name='frontimage' value='' id='frontimage'></td></tr>
+    <tr><td nowrap><b><font color='#000011'>Upload Image #2 :<br />(Profile View, optional) </font></b></td><td nowrap><input type='file' name='profileimage' value='' id='profileimage'></td></tr>
+    <tr><td nowrap><b><font color='#000011'>Upload Image #3 :<br />(Elevation View, optional) </font></b></td><td nowrap><input type='file' name='elevationimage' value='' id='elevationimage'></td></tr>
     <tr><td nowrap align='right' colspan=2><input type='hidden' name='csrfmiddlewaretoken' value='{{ csrftoken }}'><input type='hidden' name='loginsession' value='{{ loginsession }}'></td></tr>
-    <tr><td nowrap align='right'><span id='startproc'><input type='button' name='btnsnoop' value='Snoop In!' onClick='javascript:validateinputs();'></span></td><td nowrap><input type='button' name='btnreset' value='Cancel'></td></tr>
+    <tr><td nowrap align='right'><span id='startproc'><input type='button' name='btnsnoop' value='Snoop In!' onClick='javascript:goSnoop();'></span></td><td nowrap><input type='button' name='btnreset' value='Cancel'></td></tr>
+    <tr><td nowrap align='right' colspan='2'><span id='tstate'></span></td></tr>
 </table>
 </form>
 </center></div>

@@ -2,6 +2,7 @@ import os, sys, re, time
 from datetime import datetime
 
 from django.template import RequestContext
+from django.core.context_processors import csrf
 from django.template.loader import get_template
 from django.template import Template, Context
 from django.http import HttpResponse
@@ -24,6 +25,8 @@ def showFinderForm(request):
                 information on the object of your quest? We promise you that the information you furnish here will not
                 be used to associate you with any activity on this website.</b></center>"""
     html += helpMessage
-    html += inputForm()
+    c = {}
+    c.update(csrf(request))
+    html += inputForm(c['csrf_token'])
     html += pagefooter()
     return(HttpResponse(html))

@@ -65,6 +65,9 @@ DATABASES = {
     }
 }
 
+MONGO_DB_IPS = ['localhost:27017']
+MONGO_DBS = {'snoopinfo': {'name': 'snooptargets', 'collection': 'snoopdata', 'user': None, 'pass': None}}
+
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
@@ -100,3 +103,31 @@ GEOIP_PATH = BASE_DIR + os.path.sep + "GeoIP" + os.path.sep + "GeoLiteCity.dat"
 TEMPLATE_DIRS = (
     BASE_DIR + os.path.sep + 'websnoop' + os.path.sep,
 )
+
+MEDIA_ROOT = BASE_DIR + os.path.sep + 'mediafiles'
+MEDIA_URL = '/media/'
+
+IMAGE_UPLOAD_DIR = MEDIA_ROOT + os.path.sep
+
+DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
+
+FILE_UPLOAD_HANDLERS = ("django.core.files.uploadhandler.MemoryFileUploadHandler", "django.core.files.uploadhandler.TemporaryFileUploadHandler")
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': BASE_DIR + os.path.sep + 'logging' + os.path.sep + 'debug.log',
+        },
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}

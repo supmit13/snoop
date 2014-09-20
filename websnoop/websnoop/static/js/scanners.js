@@ -1,4 +1,4 @@
 
 function scan(){
-    return(text)
+    return(matches)
 }

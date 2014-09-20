@@ -5,7 +5,8 @@ from django.template.loader import get_template
 from django.template import Template, Context
 from django.http import HttpResponse
 
-from django.contrib.gis.geoip import GeoIP
+#from django.contrib.gis.geoip import GeoIP
+from django.contrib.gis.geoip.base import GeoIP
 import websnoop.settings as settings
 
 
@@ -41,9 +42,10 @@ def pageheader(title, uname='guest'):
     """
     t = get_template("templates/pageheader.html")
     page = pagejs()
+    datejs = datepickerjs("entitydob")
     cachecontrolhtml = cachecontrolheaders()
     bootstraphtml = bootstrapincludes()
-    htmlcontent = t.render(Context({'title' : title, 'pagejs' : page, 'cachecontrolhtml' : cachecontrolhtml, 'bootstraphtml' : bootstraphtml, 'username' : uname }))
+    htmlcontent = t.render(Context({'title' : title, 'pagejs' : page, 'datejs' : datejs, 'cachecontrolhtml' : cachecontrolhtml, 'bootstraphtml' : bootstraphtml, 'username' : uname }))
     return(htmlcontent)
 
 
@@ -101,7 +103,7 @@ def pagefooter():
     return htmlcontent
 
 
-def datepickerjs(targetfieldname1, targetfieldname2, targetfieldname3):
+def datepickerjs(targetfieldname1, targetfieldname2=None, targetfieldname3=None):
     """
     Utility routine to write the date picker functionality of the report generation interface.
     """

@@ -1,14 +1,39 @@
 // The script tag starts in inputvalidationjs.html
 
-function handlesuccess(transport){
+CRLF = "\r\n";
+
+
+function generateBoundary() {
+    return "PROTOTYPEJS-----------------------" + (new Date).getTime();
 }
 
 
-function handlefailure(){
+function buildMessage(elementsdict, boundary){
+    var part = "";
+    for (var key in elementsdict){
+	part += 'Content-Disposition: multipart/form-data; ';
+        part += 'name="' + key + '"' + CRLF + CRLF;
+	part += elementsdict[key] + CRLF + "--" + boundary + "--" + CRLF;
+    }
+    var request = "--" + boundary + CRLF + part + "--" + boundary + "--" + CRLF;
+    // alert(request);
+    return request;
 }
 
 
-function handleupload(){
+function send(msg, boundary){
+    var xhr = new XMLHttpRequest;
+    xhr.open("POST", '/snoop/getinput/', true);
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            alert(xhr.responseText);
+        }
+    };
+    var contentType = "multipart/form-data; boundary=" + boundary;
+    xhr.setRequestHeader("Content-Type", contentType);
+    xhr.setRequestHeader("X-CSRFToken", document.inputform.csrfmiddlewaretoken.value);
+
+    xhr.sendAsBinary(msg);
 }
 
 
@@ -16,8 +41,8 @@ function goSnoop(){
     if(!validateinputs()){
       return(false);
     }
-    message = "<b><font color='#0000AA'>We are looking up the object of your quest. This might take a while <br>(depending on the amount of data it has to process in order to gather the information regarding the object of your quest). <br>Please be patient during this process. </font></b>";
-    document.getElementById("startproc").innerHTML = "<center><span width='75%'><input type='button' name='btnsnoop' value='Snooping...' onClick='javascript:goSnoop();'><img src='/static/img/loadingimage.gif'><br>" + message + "</span></center><br>";
+    note = "<b><font color='#0000AA'>We are looking up the object of your quest. This might take a while <br>(depending on the amount of data it has to process in order to gather the information regarding the object of your quest). <br>Please be patient during this process. </font></b>";
+    document.getElementById("startproc").innerHTML = "<center><span width='75%'><input type='button' name='btnsnoop' value='Snooping...' onClick='javascript:goSnoop();'><img src='/static/img/loadingimage.gif'><br>" + note + "</span></center><br>";
 
     var targetquery = new Array();
     targetquery['entityname'] = document.inputform.entityname.value;
@@ -46,20 +71,68 @@ function goSnoop(){
     targetquery['entitydob'] = document.inputform.entitydob.value;
     targetquery['occupation'] = document.inputform.occupation.value;
     targetquery['infourls'] = document.inputform.infourls.value;
+    // Finally, sessional and meta data for the operations
+    targetquery['csrfmiddlewaretoken'] = document.inputform.csrfmiddlewaretoken.value;
+    targetquery['loginsession'] = document.inputform.loginsession.value;
+    boundary = generateBoundary();
+    message = buildMessage(targetquery, boundary);
     // Image files
     targetquery['frontimage'] = document.inputform.frontimage.value;
     targetquery['profileimage'] = document.inputform.profileimage.value;
     targetquery['elevationimage'] = document.inputform.elevationimage.value;
-    // Make a POST request to upload the files - we might need to use better image matching facilities
-    new Ajax.Request('/snoop/saveimages/', { method: 'post', requestHeaders: {'Content-Type': "application/octet-stream",}, postBody: $('frontimage'), onSuccess: handlesuccess, onFailure: handlefailure });
-    new Ajax.Request('/snoop/saveimages/', { method: 'post', requestHeaders: {'Content-Type': "application/octet-stream",}, postBody: $('profileimage'), onSuccess: handlesuccess, onFailure: handlefailure });
-    new Ajax.Request('/snoop/saveimages/', { method: 'post', requestHeaders: {'Content-Type': "application/octet-stream",}, postBody: $('elevationimage'), onSuccess: handlesuccess, onFailure: handlefailure });
-    // Finally, sessional and meta data for the operations
-    targetquery['csrfmiddlewaretoken'] = document.inputform.csrfmiddlewaretoken.value;
-    targetquery['loginsession'] = document.inputform.loginsession.value;
+
+    allelements = document.inputform.getElementsByTagName("input");
+
+    // Build rest of the message here.
+    for(var i=0; i < allelements.length; i++){
+	element = allelements[i];
+	etype = element.getAttribute("type").toUpperCase();
+	if (etype == "FILE" && element.files.length > 0 && element.name == "frontimage"){
+	    //alert(element.files[0].name);
+	    var tmpfile = element.files[0];
+	    message += 'Content-Disposition: form-data;';
+    	    message += 'name="frontimage"; filename="' + tmpfile.name + '"' + CRLF;
+    	    message += "Content-Type: application/octet-stream" + CRLF + CRLF;
+	    //message += tmpfile.getAsBinary() + CRLF;
+	    message +=  CRLF + "--" + boundary + "--" + CRLF + "--";
+	}
+    }
+
+    for(var i=0; i < allelements.length; i++){
+	element = allelements[i];
+	etype = element.getAttribute("type").toUpperCase();
+	if (etype == "FILE" && element.files.length > 0 && element.name == "profileimage"){
+	    //alert(element.files[0].name);
+	    var tmpfile = element.files[0];
+	    message += 'Content-Disposition: form-data; ';
+    	    message += 'name="profileimage"; filename="' + tmpfile.name + '"' + CRLF;
+    	    message += "Content-Type: application/octet-stream" + CRLF + CRLF;
+	    //message += tmpfile.getAsBinary() + CRLF;
+	    message +=  CRLF + "--" + boundary + "--" + CRLF + "--";
+	}
+    }
+    
+    for(var i=0; i < allelements.length; i++){
+	element = allelements[i];
+	etype = element.getAttribute("type").toUpperCase();
+	if (etype == "FILE" && element.files.length > 0 && element.name == "elevationimage"){
+	    //alert(element.files[0].name);
+	    var tmpfile = element.files[0];
+	    message += 'Content-Disposition: form-data; ';
+	    message += 'name="elevationimage"; filename="' + tmpfile.name + '"' + CRLF;
+	    message += "Content-Type: application/octet-stream" + CRLF + CRLF;
+	    //message += tmpfile.getAsBinary() + CRLF;
+	    message +=  CRLF + "--" + boundary + "--" + CRLF + "--";
+	}
+    }
+    
+    // alert(message);
+    // Make a POST request to upload the files and data - we might need to use better image matching facilities
+    send(message, boundary);
+    
     // Fire the data grabbers now
     textdata = crawl(targetquery);
-    visualdata = scan(targetquery);
+    //visualdata = scan(targetquery);
     return(true);
 }
 

@@ -1,7 +1,8 @@
-<Script type='text/javascript' src='/static/js/prototype.js'></script>
-<Script type='text/javascript' src='/static/js/crawlers.js'></script>
-<Script type='text/javascript' src='/static/js/scanners.js'></script>
-<Script language='JavaScript'>
+<script type='text/javascript' src='/static/js/prototype.js'></script>
+<script type='text/javascript' src='/static/js/crawlers.js'></script>
+<script type='text/javascript' src='/static/js/scanners.js'></script>
+<script language='JavaScript'>
+
 
         function trim(s){ 
           return ( s || '' ).replace( /^\s+|\s+$/g, '' );
@@ -26,7 +27,7 @@
 	  var linkedinPattern = new RegExp("[\w\.\-_]*@?[\w\.]*\,?");
 	  var googleplusPattern = new RegExp("\w+\,?");
 	  var twitterPattern = new RegExp("^#\w+");
-	  var dobPattern = new RegExp("^\d{1,2}\-\d{1,2}\-\d{4}$");
+	  var dobPattern = new RegExp("^\d{1,2}\-\w{3}\-\d{4}$");
 	  var imagePattern = new RegExp("\w+\.(gif)|(jpeg)|(jpg)|(png)|(bmp)|(tiff?)|(svg)$");
 
 	  document.inputform.entityname.value = trim(document.inputform.entityname.value);
@@ -97,7 +98,7 @@
 	  }
 	  document.inputform.entitydob.value = trim(document.inputform.entitydob.value);
 	  if (document.inputform.entitydob.value != "" && !dobPattern.test(document.inputform.entitydob.value)){
-	    alert("Date of birth should be of the form 'dd-mm-yyyy'");
+	    alert("Date of birth should be of the form 'dd-MON-yyyy'");
 	    return(false);
 	  }
 	  if (document.inputform.frontimage.value != "" && !imagePattern.test(document.inputform.frontimage.value)){
