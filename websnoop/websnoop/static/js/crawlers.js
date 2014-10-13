@@ -9,8 +9,10 @@ function createCORSRequest(method, url) {
   var xhr = new XMLHttpRequest();
   if ("withCredentials" in xhr) {
     xhr.open(method, url, true);
+    xhr.setRequestHeader('Content-Type', 'text/plain');
+    xhr.setRequestHeader('Origin', 'cpan.org');
   } 
-  else 
+  else {
     if (typeof XDomainRequest != "undefined") {
       xhr = new XDomainRequest();
       xhr.open(method, url);
@@ -18,6 +20,7 @@ function createCORSRequest(method, url) {
     else{
       xhr = null;
     }
+  }
   return xhr;
 }
 
@@ -37,7 +40,8 @@ function crawl(query){
     	return;
     }
 
-    xhr.onload = function() {
+    //xhr.onload = function() {
+    xhr.onreaadystatechange = function() {
     	var text = xhr.responseText;
     	var title = getTitle(text);
     	alert('Response from CORS request to ' + url + ': ' + title);

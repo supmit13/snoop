@@ -27,7 +27,7 @@
 	  var linkedinPattern = new RegExp("[\w\.\-_]*@?[\w\.]*\,?");
 	  var googleplusPattern = new RegExp("\w+\,?");
 	  var twitterPattern = new RegExp("^#\w+");
-	  var dobPattern = new RegExp("^\d{1,2}\-\w{3}\-\d{4}$");
+	  var dobPattern = new RegExp("\d{2}\-\w{3}\-\d{4}");
 	  var imagePattern = new RegExp("\w+\.(gif)|(jpeg)|(jpg)|(png)|(bmp)|(tiff?)|(svg)$");
 
 	  document.inputform.entityname.value = trim(document.inputform.entityname.value);

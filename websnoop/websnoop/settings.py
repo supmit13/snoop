@@ -60,7 +60,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'snoopdb',
         'USER': 'root',
-        'PASSWORD' : 'Welcome@1',
+        'PASSWORD' : 'Rockstand@1',
         'HOST' : 'localhost',
     }
 }

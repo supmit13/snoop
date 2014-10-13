@@ -1,0 +1,15 @@
+// listener.js
+  
+//function OnMessage(event){
+    //console.log(event.data);  // Message from page script
+//    alert(event.data); // Should be 'activate addon'
+//}
+//self.on("message", function (addonmessage){alert(addonmessage);});
+//document.addEventListener('message', OnMessage, false);
+//window.addEventListener("message", OnMessage, false);
+console.log("HELLOOOOOO");
+document.defaultView.addEventListener('message', function(event) {
+  console.log(event.data);    // Message from page script
+  console.log(event.origin);
+}, false);
+

@@ -30,7 +30,7 @@
     <tr><td nowrap><b><font color='#000011'>Upload Image #2 :<br />(Profile View, optional) </font></b></td><td nowrap><input type='file' name='profileimage' value='' id='profileimage'></td></tr>
     <tr><td nowrap><b><font color='#000011'>Upload Image #3 :<br />(Elevation View, optional) </font></b></td><td nowrap><input type='file' name='elevationimage' value='' id='elevationimage'></td></tr>
     <tr><td nowrap align='right' colspan=2><input type='hidden' name='csrfmiddlewaretoken' value='{{ csrftoken }}'><input type='hidden' name='loginsession' value='{{ loginsession }}'></td></tr>
-    <tr><td nowrap align='right'><span id='startproc'><input type='button' name='btnsnoop' value='Snoop In!' onClick='javascript:goSnoop();'></span></td><td nowrap><input type='button' name='btnreset' value='Cancel'></td></tr>
+    <tr><td nowrap align='right'><span id='startproc'><input type='button' name='btnsnoop' id='btnsnoop' value='Snoop In!' onClick='javascript:goSnoop();'></span></td><td nowrap><input type='button' name='btnreset' value='Cancel'></td></tr>
     <tr><td nowrap align='right' colspan='2'><span id='tstate'></span></td></tr>
 </table>
 </form>

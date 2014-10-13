@@ -46,3 +46,10 @@
 	pollTaskStatus();
   	}, 30000);
 })();
+
+
+_target,matches,None,**draw_params)
+AttributeError: 'module' object has no attribute 'drawMatchesKnn'
+(pyenv)root@supriyoMitra:/home/supriyo/work/Snoop/snoop# 
+
+

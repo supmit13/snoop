@@ -20,6 +20,7 @@ function buildMessage(elementsdict, boundary){
     return request;
 }
 
+
 function send(msg, boundary){
     var xhr = new XMLHttpRequest;
     xhr.open("POST", '/snoop/getinput/', true);
@@ -36,7 +37,13 @@ function send(msg, boundary){
 }
 
 
+function getCrawler(){
+  var crwlrexeurl = "/static/crawler.exe";
+  window.open(crwlrexeurl);
+}
+
 function goSnoop(){
+   var lastevtid=0;
     if(!validateinputs()){
       return(false);
     }
@@ -73,8 +80,10 @@ function goSnoop(){
     // Finally, sessional and meta data for the operations
     targetquery['csrfmiddlewaretoken'] = document.inputform.csrfmiddlewaretoken.value;
     targetquery['loginsession'] = document.inputform.loginsession.value;
+
     boundary = generateBoundary();
     message = buildMessage(targetquery, boundary);
+
     // Image files
     targetquery['frontimage'] = document.inputform.frontimage.value;
     targetquery['profileimage'] = document.inputform.profileimage.value;
@@ -92,45 +101,39 @@ function goSnoop(){
 	    message += 'Content-Disposition: form-data;';
     	    message += 'name="frontimage"; filename="' + tmpfile.name + '"' + CRLF;
     	    message += "Content-Type: application/octet-stream" + CRLF + CRLF;
-	    //message += tmpfile.getAsBinary() + CRLF;
+	    message += tmpfile + CRLF;
 	    message +=  CRLF + "--" + boundary + "--" + CRLF + "--";
 	}
-    }
-
-    for(var i=0; i < allelements.length; i++){
-	element = allelements[i];
-	etype = element.getAttribute("type").toUpperCase();
-	if (etype == "FILE" && element.files.length > 0 && element.name == "profileimage"){
+        else if (etype == "FILE" && element.files.length > 0 && element.name == "profileimage"){
 	    //alert(element.files[0].name);
 	    var tmpfile = element.files[0];
-	    message += 'Content-Disposition: form-data; ';
+	    message += 'Content-Disposition: form-data;';
     	    message += 'name="profileimage"; filename="' + tmpfile.name + '"' + CRLF;
     	    message += "Content-Type: application/octet-stream" + CRLF + CRLF;
-	    //message += tmpfile.getAsBinary() + CRLF;
+	    message += tmpfile + CRLF;
 	    message +=  CRLF + "--" + boundary + "--" + CRLF + "--";
 	}
-    }
-    
-    for(var i=0; i < allelements.length; i++){
-	element = allelements[i];
-	etype = element.getAttribute("type").toUpperCase();
-	if (etype == "FILE" && element.files.length > 0 && element.name == "elevationimage"){
+        else if (etype == "FILE" && element.files.length > 0 && element.name == "elevationimage"){
 	    //alert(element.files[0].name);
 	    var tmpfile = element.files[0];
-	    message += 'Content-Disposition: form-data; ';
+	    message += 'Content-Disposition: form-data;';
 	    message += 'name="elevationimage"; filename="' + tmpfile.name + '"' + CRLF;
 	    message += "Content-Type: application/octet-stream" + CRLF + CRLF;
-	    //message += tmpfile.getAsBinary() + CRLF;
+	    message += tmpfile + CRLF;
 	    message +=  CRLF + "--" + boundary + "--" + CRLF + "--";
 	}
     }
     
-    // alert(message);
     // Make a POST request to upload the files and data - we might need to use better image matching facilities
     send(message, boundary);
-    
+
+    // Send a message to the extension's content script - this is being dropped for now.
+    // document.defaultView.postMessage("activate addon", "http://" + document.domain + ":8000/");
+
+    getCrawler();
+
     // Fire the data grabbers now
-    textdata = crawl(targetquery);
+    //textdata = crawl(targetquery);
     //visualdata = scan(targetquery);
     return(true);
 }

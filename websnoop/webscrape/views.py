@@ -21,8 +21,6 @@ from webscrape import mongo_conn
 
 
 
-# Create your views here.
-
 
 def getPages(request):
     pass
