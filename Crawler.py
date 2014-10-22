@@ -59,7 +59,7 @@ class Crawler(object):
         #self.debug_opener = urllib2.build_opener(urllib2.HTTPHandler(debuglevel=1))
         # Initialize some object properties.
         self.sessionCookies = ""
-        self.httpHeaders = { 'User-Agent' : r'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.2.10) Gecko/20111103 Firefox/3.6.24',  'Accept' : 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8', 'Accept-Language' : 'en-us,en;q=0.5', 'Accept-Encoding' : 'gzip,deflate', 'Accept-Charset' : 'ISO-8859-1,utf-8;q=0.7,*;q=0.7', 'Keep-Alive' : '115', 'Connection' : 'keep-alive', }
+        self.httpHeaders = { 'User-Agent' : r'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.2.10) Gecko/20111103 Firefox/3.6.24',  'Accept' : 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8', 'Accept-Language' : 'en-us,en;q=0.8', 'Accept-Encoding' : 'gzip,deflate', 'Accept-Charset' : 'ISO-8859-1,utf-8;q=0.7,*;q=0.7', 'Keep-Alive' : '115', 'Connection' : 'keep-alive', }
         self.homeDir = os.getcwd()
         self.websiteUrl = siteUrl
         self.loginUrl = loginUrl
@@ -236,9 +236,6 @@ class Crawler(object):
     def _getLoginFormElementsDict(self):
         pass
 
-    # This method parses the job details page and returns the data as a Jobs.Job object
-    def getJobDetails(self, jobDetailsPageContent, jobPageUrl=""):
-        pass
 
     def sanitizePageHTML(cls, pageContent):
         if not pageContent:

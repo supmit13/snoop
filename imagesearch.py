@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import os, sys, re, time
 import cv2, numpy
 from pyimagesearch import imutils
@@ -280,10 +282,10 @@ def matchKeyPointsSURF(img1, img2):
         surf.extended = True
     kp1, des1 = surf.detectAndCompute(grayimg1, None)
     kp2, des2 = surf.detectAndCompute(grayimg2, None)
-    print kp1
-    print des1.shape
-    print kp2
-    print des2.shape
+    #print kp1
+    #print des1.shape
+    #print kp2
+    #print des2.shape
     #kp, des = surf.detectAndCompute()
 
 
@@ -375,16 +377,16 @@ def bruteforceMatcher(img1, img2, desctype='SIFT'):
                 if m.distance < 0.75*n.distance:
                     good.append([m])
             if matches.__len__() >= 10:
-                print matches.__len__()
+                #print matches.__len__()
                 return matches.__len__()
         elif desctype == 'SIFT':
             good = []
             for m,n in matches:
-                print m.distance, 0.75*n.distance
+                #print m.distance, 0.75*n.distance
                 if m.distance < 0.75*n.distance:
                     good.append([m])
             if good.__len__() >= 10:
-                print good.__len__()
+                #print good.__len__()
                 return True
             else:
                 return False
@@ -423,22 +425,22 @@ def homographyMatcher(img1, img2):
     for i, (m,n) in enumerate(matches):
         if m.distance < 0.7 * n.distance:
             goodmatches.append(m)
-    if len(good)>MIN_MATCH_COUNT:
-        src_pts = np.float32([ kp1[m.queryIdx].pt for m in good ]).reshape(-1,1,2)
-        dst_pts = np.float32([ kp2[m.trainIdx].pt for m in good ]).reshape(-1,1,2)
+    if len(goodmatches)>MIN_MATCH_COUNT:
+        src_pts = numpy.float32([ kp_query[m.queryIdx].pt for m in good ]).reshape(-1,1,2)
+        dst_pts = numpy.float32([ kp_target[m.trainIdx].pt for m in good ]).reshape(-1,1,2)
         M, mask = cv2.findHomography(src_pts, dst_pts, cv2.RANSAC,5.0)
         matchesMask = mask.ravel().tolist()
         h,w = img1.shape
-        pts = np.float32([ [0,0],[0,h-1],[w-1,h-1],[w-1,0] ]).reshape(-1,1,2)
+        pts = numpy.float32([ [0,0],[0,h-1],[w-1,h-1],[w-1,0] ]).reshape(-1,1,2)
         dst = cv2.perspectiveTransform(pts,M)
-        img2 = cv2.polylines(img2,[np.int32(dst)],True,255,3, cv2.LINE_AA)
+        img2 = cv2.polylines(img2,[numpy.int32(dst)],True,255,3, cv2.LINE_AA)
     else:
-        print "Not enough matches are found - %d/%d" % (len(good),MIN_MATCH_COUNT)
+        print "Not enough matches are found - %d/%d" % (len(goodmatches),MIN_MATCH_COUNT)
         matchesMask = None
 
-    draw_params = dict(matchColor = (0,0,255), singlePointColor = None, matchesMask=matchesMask, flags = 2)
-    img3 = drawMatches(img1,kp1,img2,kp2,good,None,**draw_params)
-    plt.imshow(img3, ’gray’),plt.show()
+    #draw_params = dict(matchColor = (0,0,255), singlePointColor = None, matchesMask=matchesMask, flags = 2)
+    img3 = drawMatches(image1,kp_query,image2,kp_target,goodmatches)
+    plt.imshow(img3, 'gray'),plt.show()
 
 
 
@@ -490,4 +492,5 @@ if __name__ == "__main__":
         print "FLANN Matcher: Images are similar\n"
     else:
         print "FLANN Matcher: Images are dissimilar\n"
+    h = homographyMatcher(imglist[0], imglist[1])
     
