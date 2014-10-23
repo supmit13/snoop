@@ -87,8 +87,10 @@ class Facebook(Crawler):
             print "Failed while making the POST request to login. Giving up...\n"
             return None
         if self.__class__.DEBUG:
+            print "\n===========================================\n"
             print "Request URL: " + self.requestUrl
             print "Session Cookies: " + self.sessionCookies
+            print "\n===========================================\n"
         self.pageRequest = urllib2.Request(self.requestUrl, None, self.httpHeaders)
         try:
             self.pageResponse = self.no_redirect_opener.open(self.pageRequest)
@@ -165,7 +167,8 @@ class Facebook(Crawler):
         httpHeaders['referer'] = httpHeaders['Referer']
         httpHeaders['accept-language'] = httpHeaders['Accept-Language']
         httpHeaders['accept-encoding'] = httpHeaders['Accept-Encoding']
-        httpHeaders['cookie'] = "locale=en_US;" + httpHeaders['Cookie']
+        self._processCookie()
+        httpHeaders['cookie'] = "locale=en_US;" + self.httpHeaders['Cookie']
         httpHeaders['user-agent'] = httpHeaders['User-Agent']
 
         # delete all the headers whose keys start with uppercase letter
@@ -180,22 +183,47 @@ class Facebook(Crawler):
         httpHeaders.pop('Cookie', None)
         httpHeaders.pop('User-Agent', None)
         if self.__class__.DEBUG:
+            print "\n===========================================\n"
             print self.requestUrl
             print httpHeaders
+            print "\n===========================================\n"
         # Now, create the request and hit search...
         self.pageRequest = urllib2.Request(self.requestUrl, None, httpHeaders)
         try:
             self.pageResponse = self.no_redirect_opener.open(self.pageRequest)
             # Process pageResponse to extract search results...
             self.currentPageContent = self.__class__._decodeGzippedContent(self.getPageContent())
-            ff = open("dumpsearch.html", "w")
-            ff.write(self.currentPageContent)
-            ff.close()
             return(self.currentPageContent)
         except:
             print "Could not make the HTTP request for search term '%s' - Error: %s\n"%(searchText, sys.exc_info()[1].__str__())
             return (None)
 
+
+    
+    def _processCookie(self):
+        """
+        Method to remove extra semicolons and repeatitive keys in cookies. To be used internally.
+        """
+        self.sessionCookies = self.httpHeaders['Cookie']
+        cookies = self.sessionCookies.split(";")
+        cookiesDict = {}
+        for cookie in cookies:
+            cookie = re.sub(re.compile(r"\s+$"), "", cookie)
+            cookie = re.sub(re.compile(r"^\s+"), "", cookie)
+            cookie = re.sub(self.__class__.multipleWhiteSpacesPattern, "", cookie)
+            if cookie == "":
+                continue
+            elif re.search(re.compile(r"Max\-Age=\-"), cookie) or re.search(re.compile(r"=deleted"), cookie):
+                continue
+            else:
+                cookieparts = cookie.split("=")
+                cookiesDict[cookieparts[0]] = cookieparts[1]
+        self.sessionCookies = ""
+        for cookie in cookiesDict.keys():
+            self.sessionCookies += cookie + "=" + cookiesDict[cookie] + ";"
+        self.httpHeaders['Cookie'] = self.sessionCookies
+        return(self.sessionCookies)
+    
 
     def getContacts(self, targetEntity):
         """
@@ -225,6 +253,9 @@ if __name__ == "__main__":
     searchEntity = sys.argv[1]
     facebook = Facebook()
     pageContent = facebook.doLogin()
+    ff = open("dumplogin.html", "w")
+    ff.write(pageContent)
+    ff.close()
     if not facebook.assertLogin("Home") or not facebook.assertLogin("Inbox"):
         print "Could not login as %s\nTry with a different username.\n"%facebook.siteUsername
         sys.exit()
