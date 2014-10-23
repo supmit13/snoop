@@ -75,6 +75,9 @@ class LinkedIn(Crawler):
             print "Failed while making the POST request to login. Giving up...\n"
             return None
         self._processCookie()
+        self.httpHeaders['Host'] = 'www.linkedin.com'
+        self.httpHeaders.pop('Content-Type', None)
+        self.httpHeaders.pop('Content-Length', None)
         self.pageRequest = urllib2.Request(self.requestUrl, None, self.httpHeaders)
         if self.__class__.DEBUG:
             print "\n===========================================\n"
@@ -113,7 +116,7 @@ class LinkedIn(Crawler):
             cookie = re.sub(self.__class__.multipleWhiteSpacesPattern, "", cookie)
             if cookie == "":
                 continue
-            elif re.search(re.compile(r"Max\-Age=\-"), cookie) or re.search(re.compile(r"=\"?delete"), cookie) or re.search(re.compile(r"Path="), cookie) or re.search(re.compile(r"Expires"), cookie) or re.search(re.compile(r"Secure"), cookie) or re.search(re.compile(r"HttpOnly"), cookie):
+            elif re.search(re.compile(r"Max\-Age=(\-|0)"), cookie) or re.search(re.compile(r"=\"?delete"), cookie) or re.search(re.compile(r"Path="), cookie) or re.search(re.compile(r"Expires"), cookie) or re.search(re.compile(r"Secure"), cookie) or re.search(re.compile(r"HttpOnly"), cookie):
                 continue
             else:
                 cookieparts = cookie.split("=")
@@ -134,7 +137,13 @@ if __name__ == "__main__":
     searchEntity = sys.argv[1]
     linkedin = LinkedIn()
     pageContent = linkedin.doLogin()
-    ff = open("linkedinlogin.html", "w")
-    ff.write(pageContent)
-    ff.close()
+    if pageContent:
+        ff = open("linkedinlogin2.html", "w")
+        ff.write(pageContent)
+        ff.close()
+    if not linkedin.assertLogin("Sign Out"):
+        print "Could not log in"
+        sys.exit()
+    else:
+        print "Successfully logged in as %s\n"%linkedin.siteUsername
     linkedin.conductSearch(searchEntity)
