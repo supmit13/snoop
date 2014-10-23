@@ -75,9 +75,13 @@ class LinkedIn(Crawler):
             print "Failed while making the POST request to login. Giving up...\n"
             return None
         self._processCookie()
+        
+        # Now, the most important 3 steps, otherwise linkedin won't let you in.
         self.httpHeaders['Host'] = 'www.linkedin.com'
         self.httpHeaders.pop('Content-Type', None)
         self.httpHeaders.pop('Content-Length', None)
+        # Without the above steps, linkedin gives HTTP Error 999 - Request Denied.
+        
         self.pageRequest = urllib2.Request(self.requestUrl, None, self.httpHeaders)
         if self.__class__.DEBUG:
             print "\n===========================================\n"
