@@ -6,7 +6,7 @@ from urlparse import urlparse, urlsplit
 import StringIO
 import mimetypes, mimetools
 from ConfigParser import ConfigParser
-import tidy
+#import tidy
 import xml.etree.ElementTree as etree
 
 
@@ -89,9 +89,9 @@ class Crawler(object):
                 self.httpHeaders["Cookie"] = self.sessionCookies
                 if self.__class__.DEBUG:
                     print "Request URL: " + self.requestUrl
-                    print "Session Cookies: " + self.sessionCookies
+                    print "Session Cookies: " + self.sessionCookies.__str__()
             except:
-                print __file__.__str__() + ": Couldn't fetch page due to limited connectivity. Please check your internet connection and try again" + sys.exc_info()[1].__str__()
+                print __file__.__str__() + ": Couldn't fetch page due to limited connectivity (1). Please check your internet connection and try again. " + sys.exc_info()[1].__str__()
             self.httpHeaders["Referer"] = self.requestUrl
             # Initialize the account related variables...
             self.currentPageContent = self.__class__._decodeGzippedContent(self.getPageContent())
@@ -115,6 +115,7 @@ class Crawler(object):
         self.perSiteThreads = self.cfgParser.get("ThreadInfo", "max_per_site_threads")
         # Try to find if proxies are to be used. If so, load them in self.proxyUrls as a list.
         self.proxyUrls = None
+        self.searchResults = None
         try:
             proxiesLine = self.cfgParser.get("Proxy", "urlslist")
             self.proxyUrls = proxiesLine.split(",")
@@ -236,7 +237,7 @@ class Crawler(object):
     def _getLoginFormElementsDict(self):
         pass
 
-
+    """
     def sanitizePageHTML(cls, pageContent):
         if not pageContent:
             return None
@@ -244,7 +245,15 @@ class Crawler(object):
         tidy_html = tidy.parseString(pageContent, **tidy_opts).__str__()
         return(tidy_html)
     sanitizePageHTML = classmethod(sanitizePageHTML)
+    """
 
+    def parseSearchHtml(self):
+        """
+        Parses the HTML content in the object's currentPageContent attribute and sets the
+        object's 'searchResults' attribute with the resultant dict. Returns the number of
+        matches found.
+        """
+        pass
 
     # Method to check if the user is in logged in state. The params are: JobScraper object and a user provided string.
     # The user may or may not provide any string, i.e, the second parameter is optional. 'userPattern' (2nd argument)
