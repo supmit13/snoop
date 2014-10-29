@@ -183,7 +183,11 @@ if __name__ == "__main__":
     linkedin = LinkedIn()
     pageContent = linkedin.doLogin()
     if not linkedin.assertLogin("Sign Out"):
-        print "Could not log in"
+        print "Could not log in. Username: %s, Password: %s\n"%(linkedin.siteUsername, linkedin.sitePassword)
+        print "Dumping file in '../html/linkedin_loginfail.html'\n"
+        fl = open("../html/linkedin_loginfail.html", "w")
+        fl.write(pageContent)
+        fl.close()
         sys.exit()
     else:
         print "Successfully logged in as %s\n"%linkedin.siteUsername
