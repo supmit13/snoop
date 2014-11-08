@@ -199,6 +199,6 @@ if __name__ == "__main__":
     searchResults = google.conductSearch(searchEntity)
     fg = open("google.txt", "w")
     for entry in searchResults:
-        fg.write(entry)
+        fg.write(entry + "\n")
     fg.close()
     
