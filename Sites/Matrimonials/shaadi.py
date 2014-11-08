@@ -18,7 +18,7 @@ class Shaadi(Crawler):
     """
     def __init__(self):
         self.__class__.DEBUG = True
-        super(Shaadi, self).__init__("../../conf/snoop.cnf", "http://www.shaadi.com/", "https://www.shaadi.com/")
+        super(Shaadi, self).__init__("../../conf/snoop.cnf", "http://www.shaadi.com/", "http://www.shaadi.com/")
         self.availableCreds = self.loadCredentials("shaadi")
 
 
@@ -40,7 +40,7 @@ class Shaadi(Crawler):
 
         usernameFieldname = loginForm.find("input", {'type' : 'text'})['name']
         passwordFieldname = loginForm.find("input", {'type' : 'password'})['name']
-        otherFields = loginForm.findAll("input")
+        otherFields = loginForm.findAll("input", {'type' : 'hidden'})
         self.postData = {usernameFieldname : self.siteUsername, passwordFieldname : self.sitePassword, }
         for field in otherFields:
             fieldname = ""
@@ -54,12 +54,21 @@ class Shaadi(Crawler):
             if field.has_key('value'):
                 fieldvalue = field['value']
             self.postData[fieldname] = fieldvalue
+        checkboxField = loginForm.find("input", {'type' : 'checkbox'})
+        self.postData[checkboxField['name']] = checkboxField['value']
+        submitButtonField = loginForm.find("input", {'type' : 'submit'})
+        self.postData[submitButtonField['class']] = submitButtonField['value']
         encodedData = urllib.urlencode(self.postData)
+        self._processCookie()
         requestHeaders = {}
         for hdr in self.httpHeaders.keys():
             requestHeaders[hdr] = self.httpHeaders[hdr]
         requestHeaders['Content-Type'] = "application/x-www-form-urlencoded"
         requestHeaders['Content-Length'] = encodedData.__len__()
+        if self.__class__.DEBUG:
+            print "Sending login request to '%s'\n\n"%self.requestUrl
+            print "POST Data: %s\n\n"%encodedData
+            print "Headers: %s\n\n"%requestHeaders
         self.pageRequest = urllib2.Request(self.requestUrl, encodedData, requestHeaders)
         try:
             self.pageResponse = self.no_redirect_opener.open(self.pageRequest)
@@ -72,6 +81,8 @@ class Shaadi(Crawler):
             allCookies = responseHeaders['Set-Cookie'].split(",")
             for cookie in allCookies:
                 self.httpHeaders['Cookie'] += cookie + "; "
+        self._processCookie()
+
         if responseHeaders.has_key('Location'):
             self.requestUrl = responseHeaders['Location']
         else:
@@ -127,7 +138,7 @@ class Shaadi(Crawler):
             cookie = re.sub(self.__class__.multipleWhiteSpacesPattern, "", cookie)
             if cookie == "":
                 continue
-            elif re.search(re.compile(r"Max\-Age=([^;]+)"), cookie) or re.search(re.compile(r"=\"?delete"), cookie) or re.search(re.compile(r"[pP]ath=[^;]+"), cookie) or re.search(re.compile(r"Expires"), cookie) or re.search(re.compile(r"Secure"), cookie) or re.search(re.compile(r"HttpOnly"), cookie) or re.search(re.compile(r"Priority=HIGH", re.IGNORECASE), cookie) or re.search(re.compile(r"[dD]omain"), cookie):
+            elif re.search(re.compile(r"Max\-Age=([^;]+)"), cookie) or re.search(re.compile(r"=\"?delete"), cookie) or re.search(re.compile(r"[pP]ath=[^;]+"), cookie) or re.search(re.compile(r"[eE]xpires"), cookie) or re.search(re.compile(r"Secure"), cookie) or re.search(re.compile(r"HttpOnly"), cookie) or re.search(re.compile(r"Priority=HIGH", re.IGNORECASE), cookie) or re.search(re.compile(r"[dD]omain"), cookie):
                 continue
             else:
                 cookieparts = cookie.split("=")
