@@ -88,6 +88,8 @@ class Google(Crawler):
     def _getSearchResults(self, searchPageContent):
         startPhrase = "<body"
         endPhrase = "function _gjp(){"
+        if not searchPageContent:
+            return(None)
         pageParts = searchPageContent.split(startPhrase)
         desiredPart = pageParts[1]
         pageParts2 = desiredPart.split(endPhrase)
@@ -119,14 +121,16 @@ class Google(Crawler):
         pageCtr = 0
         anchors = []
         anchors = self._getSearchResults(searchPage)
-        print "Retrieved anchors from the first search listing page...\n\n"
-        while pageCtr < self.searchListingPageDepth:
+        print "Retrieved anchors from the first search listing page. Going to iterate over %s pages...\n\n"%self.searchListingPageDepth
+        while int(pageCtr) < int(self.searchListingPageDepth):
             pageCtr += 1
-            print "Looking up page #%s of search listing...\n\n"%pageCtr.__str__()
+            print "Looking up page #%s of %s in search listing...\n\n"%(pageCtr.__str__(), self.searchListingPageDepth)
             searchPage = self._searchGoogle(searchEntity, pageCtr)
             anchors2 = []
             anchors2 = self._getSearchResults(searchPage)
             if not anchors2:
+                if self.__class__.DEBUG:
+                    print "No anchors found in page.\n\n"
                 continue
             anchors.extend(anchors2)
         anchors = tuple(anchors)
@@ -193,5 +197,8 @@ if __name__ == "__main__":
     searchEntity = sys.argv[1]
     google = Google()
     searchResults = google.conductSearch(searchEntity)
-    print searchResults
+    fg = open("google.txt", "w")
+    for entry in searchResults:
+        fg.write(entry)
+    fg.close()
     
