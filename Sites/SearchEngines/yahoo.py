@@ -127,8 +127,8 @@ class Yahoo(Crawler):
                 break
             nextPageUrl = nextPageAnchor['href']
             self.requestUrl = nextPageUrl
-            self.pageRequest = urllib2.Request(self.requestUrl)
-            print "Fetching page #%s... \n\n"%pageCtr.__str__()
+            self.pageRequest = urllib2.Request(self.requestUrl, None, self.httpHeaders)
+            print "Fetching page #%s from '%s'... \n\n"%(pageCtr.__str__(), self.requestUrl)
             try:
                 self.pageResponse = self.no_redirect_opener.open(self.pageRequest)
             except:
@@ -210,8 +210,11 @@ if __name__ == "__main__":
     searchEntity = sys.argv[1]
     yahoo = Yahoo()
     searchResults = yahoo.conductSearch(searchEntity)
-    fg = open("../html/yahoo.txt", "w")
+    fy = open("../html/yahoo.txt", "w")
     for entry in searchResults:
-        fg.write(entry[0] + " =====>> " + entry[1].__str__() + "\n")
-    fg.close()
+        if entry.__len__() == 2:
+            fy.write(entry[0].__str__() + " =====>> " + entry[1].__str__() + "\n\n")
+        else:
+            fy.write(entry.__str__() + "\n\n")
+    fy.close()
     
