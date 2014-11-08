@@ -14,7 +14,7 @@ import md5, base64
 
 class Google(Crawler):
     """
-    This class handles crawling and extraction of data from wayn.
+    This class handles crawling and extraction of data from google search.
     It is derived from class Crawler.
     """
     url = "http://www.google.co.in/search?sourceid=chrome&ie=UTF-8&q=##PLACEHOLDER##&oq=##PLACEHOLDER##&start=##PAGENUM##"
@@ -137,14 +137,6 @@ class Google(Crawler):
         return anchors
 
 
-    def _getDomain(cls, webUrl):
-        obj = urlparse(webUrl)
-        domain = obj.netloc
-        domain = re.sub(re.compile(r"\:\d{2,4}"), "", domain)
-        return(domain)
-    _getDomain = classmethod(_getDomain)
-
-
     # This method checks for all anchor tags only. Other tags may be handled later. Returns a list of unique URLs
     def _findAllLocalPageUrls(self, domain):
         print "Fetching all local URLs from this page.\nAssumption: We will find all relevant local URLs from this page."
@@ -175,21 +167,6 @@ class Google(Crawler):
         matches found.
         """
         pass
-
-    # This method checks if the list of anchors/links passed as argument has unique domains. 
-    # If not, we retain only the first anchor/link and drop all the subsequent anchors.
-    # This should be fine since when we process the first anchor, we will process all pages
-    # from the website. Of course, we assume, though I am not sure if we may do so, that
-    # the dropped link appears as a link in the page being processed.
-    def checkDomainUniqueness(self, anchorsList):
-        uniqueDomainAnchorsDict = {}
-        for anchor in anchorsList:
-            domain = self.__class__._getDomain(anchor)
-            if uniqueDomainAnchorsDict.has_key(domain): # We already have a link for this domain.
-                continue
-            else: 
-                uniqueDomainAnchorsDict[domain] = anchor
-        return(uniqueDomainAnchorsDict.values())
 
 
 

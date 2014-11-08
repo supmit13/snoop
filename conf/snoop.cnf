@@ -26,5 +26,9 @@ cvdumpdir=./data/cv_dump/
 urlslist = http://cidtunnel.info,http://boxproxy.info, http://browserusa.com, http://unblockforce.info, http://xinggangdu.com, http://www.placesite.info,http://trustprox.com, http://ukproxys.com
 
 [CredentialsFile]
-credsfile=../conf/creds.cnf
+credsfile=../../conf/prettycreds.cnf
 
+[SearchEngines]
+googlelistingdepth=10
+yahoolistingdepth=10
+binglistingdepth=5
