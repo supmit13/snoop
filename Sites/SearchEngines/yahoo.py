@@ -53,10 +53,10 @@ class Yahoo(Crawler):
         pass # No login is required to search
 
 
-    def _getSearchResults(self, searchPageContent):
+    def _getSearchResults(self, searchPageContent, bstr='1'):
         soup = BeautifulSoup(searchPageContent)
         print "Extracting links and content...\n\n"
-        olist = soup.find("ol", {'start' : '1'})
+        olist = soup.find("ol", {'start' : bstr})
         if not olist:
             return([])
         ocontents = olist.renderContents()
@@ -67,7 +67,7 @@ class Yahoo(Crawler):
             if self.__class__.DEBUG:
                 print "Found link %s...\n\n"%anchor
             content = entry.renderContents()
-            element = [anchor, content.encode('utf-8'), ]
+            element = [anchor, content.decode('utf-8'), ]
             searchEntries.append(element)
         return(searchEntries)
 
@@ -117,10 +117,10 @@ class Yahoo(Crawler):
         print "Starting to iterate over %s pages...\n\n"%self.searchListingPageDepth
         while int(pageCtr) < int(self.searchListingPageDepth):
             soup = BeautifulSoup(self.currentPageContent)
-            searchEntries = self._getSearchResults(self.currentPageContent)
-            self.searchEntries.append(searchEntries)
+            searchEntries = self._getSearchResults(self.currentPageContent, data_b.__str__())
             data_b += 10
             pageCtr += 1
+            self.searchEntries.append(searchEntries)
             nextPageAnchor = soup.find("a", {'data-b' : data_b.__str__()})
             if not nextPageAnchor:
                 print "Could not find the next page link. Either we have iterated over the entire search listing, or we are on a wrong page.\n\n"
