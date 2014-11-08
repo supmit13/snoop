@@ -49,10 +49,15 @@ class Crawler(object):
     htmlEntityPattern = re.compile(r"\W\&\w+;\W")
     pathEndSlashPattern = re.compile(r"\/$")
     newlinePattern = re.compile(r"\n", re.MULTILINE | re.DOTALL)
+    emailIdPattern = re.compile(r"\W(\w+\.?\w{0,}@\w+\.\w+\.?\w*)\W", re.MULTILINE | re.DOTALL)
+    anchorTagPattern = re.compile(r"<a\s+[^>]{0,}href=([^\s\>]+)\s?.*?>\s*\w+", re.IGNORECASE | re.MULTILINE | re.DOTALL)
+    bookmarkLinkPattern = re.compile("^#",re.MULTILINE | re.DOTALL)
+    doubleQuotePattern = re.compile('"', re.MULTILINE | re.DOTALL)
 
     htmlEntitiesDict = {'&nbsp;' : ' ', '&#160;' : ' ', '&amp;' : '&', '&#38;' : '&', '&lt;' : '<', '&#60;' : '<', '&gt;' : '>', '&#62;' : '>', '&apos;' : '\'', '&#39;' : '\'', '&quot;' : '"', '&#34;' : '"'}
 
     def __init__(self, cfgFile, siteUrl="", loginUrl=""):
+        print "Initializing...\n\n"
         # Create the opener object(s). Might need more than one type if we need to get pages with unwanted redirects.
         self.opener = urllib2.build_opener() # This is my normal opener....
         self.no_redirect_opener = urllib2.build_opener(urllib2.HTTPHandler(), urllib2.HTTPSHandler(), NoRedirectHandler()) # this one won't handle redirects.
@@ -133,6 +138,7 @@ class Crawler(object):
         else:
             return None
 
+
     def _decodeGzippedContent(cls, encoded_content):
         response_stream = StringIO.StringIO(encoded_content)
         decoded_content = ""
@@ -145,6 +151,13 @@ class Crawler(object):
 
     _decodeGzippedContent = classmethod(_decodeGzippedContent)
 
+
+    def buildGraph(self):
+        pass # To be implemented by derived classes
+
+
+    def conductSearch(self, searchEntity):
+        pass # To be implemented by derived classes
 
     """
     sitename will be a single word string that identifies the website. e.g facebook, linkedin, etc.
