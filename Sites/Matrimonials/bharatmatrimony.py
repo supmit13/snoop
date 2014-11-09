@@ -68,13 +68,34 @@ class BharatMatrimony(Crawler):
         self.postData[checkboxname] = checkboxvalue
         self.postData['TEMPPASSWD1'] = 'Password'
         encodedData = urllib.urlencode(self.postData)
+        print "Trying to login as %s at '%s'...\n\n"%(self.siteUsername, self.requestUrl)
         self.pageRequest = urllib2.Request(self.requestUrl, encodedData, self.httpHeaders)
-        try:
-            self.pageResponse = self.no_redirect_opener.open(self.pageRequest)
-        except:
-            print "Failed to make the login request - Error: %s\n\n"%sys.exc_info()[1].__str__()
-            return(None)
-        return(self.currentPageContent)
+        if self.__class__.DEBUG:
+            print "Encoded Data: %s\n\n"%encodedData
+        while True:
+            try:
+                self.pageResponse = self.no_redirect_opener.open(self.pageRequest)
+            except:
+                print "Failed to make the login request to '%s' - Error: %s\n\n"%(self.requestUrl, sys.exc_info()[1].__str__())
+                return(None)
+            responseHeaders = self.pageResponse.info()
+            if responseHeaders.has_key('Set-Cookie') and responseHeaders['Set-Cookie'] is not None:
+                self.sessionCookies = responseHeaders['Set-Cookie']
+                cookiesList = self.sessionCookies.split(",")
+                for cookie in cookiesList:
+                    if type(cookie) == str and type(self.httpHeaders['Cookie']) == str:
+                        self.httpHeaders['Cookie'] += "; " + cookie
+                if self.httpHeaders['Cookie'] is not None:
+                    self._processCookie()
+            self.httpHeaders['Referer'] = self.requestUrl
+            if responseHeaders.has_key('Location'):
+                self.requestUrl = responseHeaders['Location']
+                if not self.__class__._isAbsoluteUrl(self.requestUrl):
+                    self.requestUrl = "https://secure.bharatmatrimony.com" + self.requestUrl
+                self.pageRequest = urllib2.Request(self.requestUrl, None, self.httpHeaders)
+            else:
+                self.currentPageContent = self.__class__._decodeGzippedContent(self.getPageContent())
+                return(self.currentPageContent)
 
 
     def conductSearch(self, searchEntity):
@@ -92,6 +113,38 @@ class BharatMatrimony(Crawler):
         matches found.
         """
         pass
+
+
+    def _processCookie(self):
+        """
+        Method to remove extra semicolons and repeatitive keys in cookies. To be used internally.
+        This is slightly different from the other implementation (in facebook.py and twitter.py)
+        because it is capable of handling '=' character in the cookie values.
+        """
+        self.sessionCookies = self.httpHeaders['Cookie']
+        cookies = self.sessionCookies.split(";")
+        cookiesDict = {}
+        for cookie in cookies:
+            cookie = re.sub(re.compile(r"\s+$"), "", cookie)
+            cookie = re.sub(re.compile(r"^\s+"), "", cookie)
+            cookie = re.sub(self.__class__.multipleWhiteSpacesPattern, "", cookie)
+            if cookie == "":
+                continue
+            elif re.search(re.compile(r"Max\-Age=([^;]+)"), cookie) or re.search(re.compile(r"=\"?delete"), cookie) or re.search(re.compile(r"[pP]ath=[^;]+"), cookie) or re.search(re.compile(r"[eE]xpires"), cookie) or re.search(re.compile(r"Secure"), cookie) or re.search(re.compile(r"HttpOnly"), cookie) or re.search(re.compile(r"Priority=HIGH", re.IGNORECASE), cookie) or re.search(re.compile(r"[dD]omain"), cookie):
+                continue
+            else:
+                cookieparts = cookie.split("=")
+                if cookieparts.__len__() < 2:
+                    continue
+                cookiesDict[cookieparts[0]] = cookieparts[1]
+                if cookieparts.__len__() > 2:
+                    for j in range(2, cookieparts.__len__()):
+                        cookiesDict[cookieparts[0]] += "=" + cookieparts[j]
+        self.sessionCookies = ""
+        for cookie in cookiesDict.keys():
+            self.sessionCookies += cookie + "=" + cookiesDict[cookie] + ";"
+        self.httpHeaders['Cookie'] = self.sessionCookies
+        return(self.sessionCookies)
 
 
 if __name__ == "__main__":
