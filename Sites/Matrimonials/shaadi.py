@@ -20,6 +20,14 @@ class Shaadi(Crawler):
         self.__class__.DEBUG = True
         super(Shaadi, self).__init__("../../conf/snoop.cnf", "http://www.shaadi.com/", "http://www.shaadi.com/")
         self.availableCreds = self.loadCredentials("shaadi")
+        # The 'Crawler' class' '_getCookieFromResponse' method doesn't handle multiple 'Set-Cookie' headers. So we do it here on pageResponse.
+        responseHeaders = self.pageResponse.info()
+        allCookies = responseHeaders['Set-Cookie']
+        cookiesList = allCookies.split(",")
+        self.httpHeaders['Cookie'] = ""
+        for cookie in cookiesList:
+            self.httpHeaders['Cookie'] += cookie + "; "
+        self._processCookie()
 
 
     def doLogin(self, username="", password=""):
@@ -87,7 +95,8 @@ class Shaadi(Crawler):
             self.requestUrl = responseHeaders['Location']
         else:
             print "Could not get the redirect URL on login.\n\n"
-            return(None)
+            self.currentPageContent = self.__class__._decodeGzippedContent(self.getPageContent())
+            return(self.currentPageContent)
         if not self.__class__._isAbsoluteUrl(self.requestUrl):
             self.requestUrl = self.baseUrl + self.requestUrl
         self.pageRequest = urllib2.Request(self.requestUrl, None, self.httpHeaders)
@@ -163,7 +172,7 @@ if __name__ == "__main__":
         ff = open("../html/shaadilogin.html", "w")
         ff.write(pageContent)
         ff.close()
-    if not shd.assertLogin("Sign Out"):
+    if not shd.assertLogin("<div title=\"Logged in as: "):
         print "Could not log in"
         sys.exit()
     else:
