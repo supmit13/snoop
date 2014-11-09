@@ -23,7 +23,58 @@ class BharatMatrimony(Crawler):
 
 
     def doLogin(self, username="", password=""):
-        pass
+        soup = BeautifulSoup(self.currentPageContent)
+        loginForm = soup.find("form", {'name' : 'Login'})
+        if not loginForm:
+            print "Could not find the login form in the page. Please ensure that we are on the correct page.\n\n"
+            return(None)
+        loginAction = loginForm['action']
+        loginMethod = loginForm['method']
+        self.requestUrl = loginAction
+        if not self.__class__._isAbsoluteUrl(self.requestUrl):
+            self.requestUrl = self.baseUrl + self.requestUrl
+
+        credsLen = self.availableCreds.__len__()
+        randomIndex = random.randint(0, credsLen - 1)
+
+        bhmUsernames = self.availableCreds.keys()
+        self.siteUsername = bhmUsernames[randomIndex]
+        self.sitePassword = self.availableCreds[self.siteUsername]
+        
+        usernameFieldname = loginForm.find("input", {'type' : 'text'})['name']
+        passwordFieldname = loginForm.find("input", {'type' : 'password'})['name']
+        self.postData = {usernameFieldname : self.siteUsername, passwordFieldname : self.sitePassword, }
+        hiddenFields = loginForm.find("input", {'type' : 'hidden'})
+        for hdnfld in hiddenFields:
+            fldname = ""
+            fldvalue = ""
+            if hdnfld.has_key('name'):
+                fldname = hdnfld['name']
+            elif hdnfld.has_key('id'):
+                fldname = hdnfld['id']
+            else:
+                continue
+            if hdnfld.has_key('value'):
+                fldvalue = hdnfld['value']
+            else:
+                pass
+            self.postData[fldname] = fldvalue
+        checkboxField = loginForm.find("input", {'type' : 'checkbox'})
+        checkboxname, checkboxvalue = "", ""
+        if checkboxField.has_key('name'):
+            checkboxname = checkboxField['name']
+        if checkboxField.has_key('value'):
+            checkboxvalue = checkboxField['value']
+        self.postData[checkboxname] = checkboxvalue
+        self.postData['TEMPPASSWD1'] = 'Password'
+        encodedData = urllib.urlencode(self.postData)
+        self.pageRequest = urllib2.Request(self.requestUrl, encodedData, self.httpHeaders)
+        try:
+            self.pageResponse = self.no_redirect_opener.open(self.pageRequest)
+        except:
+            print "Failed to make the login request - Error: %s\n\n"%sys.exc_info()[1].__str__()
+            return(None)
+        return(self.currentPageContent)
 
 
     def conductSearch(self, searchEntity):
@@ -48,7 +99,7 @@ if __name__ == "__main__":
     bhm = BharatMatrimony()
     pageContent = bhm.doLogin()
     if pageContent:
-        ff = open("../html/shaadilogin.html", "w")
+        ff = open("../html/bharatmatrimony.html", "w")
         ff.write(pageContent)
         ff.close()
     if not bhm.assertLogin("Sign Out"):
