@@ -91,28 +91,29 @@ class Shaadi(Crawler):
                 self.httpHeaders['Cookie'] += cookie + "; "
         self._processCookie()
 
-        if responseHeaders.has_key('Location'):
-            self.requestUrl = responseHeaders['Location']
-        else:
-            print "Could not get the redirect URL on login.\n\n"
-            self.currentPageContent = self.__class__._decodeGzippedContent(self.getPageContent())
-            return(self.currentPageContent)
-        if not self.__class__._isAbsoluteUrl(self.requestUrl):
-            self.requestUrl = self.baseUrl + self.requestUrl
-        self.pageRequest = urllib2.Request(self.requestUrl, None, self.httpHeaders)
-        try:
-            self.pageResponse = self.no_redirect_opener.open(self.pageRequest)
-        except:
-            print "Failed to make the redirect request to '%s' during login. Error: '%s'\n\n"%(self.requestUrl, sys.exc_info()[1].__str__())
-            return(None)
-        responseHeaders = self.pageResponse.info()
-        self.httpHeaders['Referer'] = self.requestUrl
-        if responseHeaders.has_key('Set-Cookie'):
-            allCookies = responseHeaders['Set-Cookie'].split(",")
-            for cookie in allCookies:
-                self.httpHeaders['Cookie'] += cookie + "; "
-        self.currentPageContent = self.__class__._decodeGzippedContent(self.getPageContent())
-        return(self.currentPageContent)
+        while True:
+            if responseHeaders.has_key('Location'):
+                self.requestUrl = responseHeaders['Location']
+            else:
+                print "Retrieving content from '%s'.\n\n"%self.requestUrl
+                self.currentPageContent = self.__class__._decodeGzippedContent(self.getPageContent())
+                return(self.currentPageContent)
+            if not self.__class__._isAbsoluteUrl(self.requestUrl):
+                self.requestUrl = self.baseUrl + self.requestUrl
+            print "Redirection URL: %s\n\n"%self.requestUrl
+            self.pageRequest = urllib2.Request(self.requestUrl, None, self.httpHeaders)
+            try:
+                self.pageResponse = self.no_redirect_opener.open(self.pageRequest)
+            except:
+                print "Failed to make the redirect request to '%s' during login. Error: '%s'\n\n"%(self.requestUrl, sys.exc_info()[1].__str__())
+                return(None)
+            responseHeaders = self.pageResponse.info()
+            self.httpHeaders['Referer'] = self.requestUrl
+            if responseHeaders.has_key('Set-Cookie'):
+                allCookies = responseHeaders['Set-Cookie'].split(",")
+                for cookie in allCookies:
+                    self.httpHeaders['Cookie'] += cookie + "; "
+            self._processCookie()
 
 
     def conductSearch(self, searchEntity):
