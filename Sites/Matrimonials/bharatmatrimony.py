@@ -18,7 +18,7 @@ class BharatMatrimony(Crawler):
     """
     def __init__(self):
         self.__class__.DEBUG = True
-        super(BharatMatrimony, self).__init__("../../conf/snoop.cnf", "https://www.bharatmatrimony.com/", "https://www.bharatmatrimony.com/")
+        super(BharatMatrimony, self).__init__("../../conf/snoop.cnf", "http://www.bharatmatrimony.com/", "http://www.bharatmatrimony.com/")
         self.availableCreds = self.loadCredentials("bharatmatrimony")
 
 
@@ -44,7 +44,7 @@ class BharatMatrimony(Crawler):
         usernameFieldname = loginForm.find("input", {'type' : 'text'})['name']
         passwordFieldname = loginForm.find("input", {'type' : 'password'})['name']
         self.postData = {usernameFieldname : self.siteUsername, passwordFieldname : self.sitePassword, }
-        hiddenFields = loginForm.find("input", {'type' : 'hidden'})
+        hiddenFields = loginForm.findAll("input", {'type' : 'hidden'})
         for hdnfld in hiddenFields:
             fldname = ""
             fldvalue = ""
@@ -82,9 +82,12 @@ class BharatMatrimony(Crawler):
             if responseHeaders.has_key('Set-Cookie') and responseHeaders['Set-Cookie'] is not None:
                 self.sessionCookies = responseHeaders['Set-Cookie']
                 cookiesList = self.sessionCookies.split(",")
+                if self.httpHeaders['Cookie'] is None:
+                    self.httpHeaders['Cookie'] = ""
                 for cookie in cookiesList:
-                    if type(cookie) == str and type(self.httpHeaders['Cookie']) == str:
-                        self.httpHeaders['Cookie'] += "; " + cookie
+                    self.httpHeaders['Cookie'] += "; " + cookie.__str__()
+                    if self.__class__.DEBUG:
+                        print "COOKIES: " + self.httpHeaders['Cookie'].__str__() + "\n==============================================================\n"
                 if self.httpHeaders['Cookie'] is not None:
                     self._processCookie()
             self.httpHeaders['Referer'] = self.requestUrl
@@ -93,6 +96,7 @@ class BharatMatrimony(Crawler):
                 if not self.__class__._isAbsoluteUrl(self.requestUrl):
                     self.requestUrl = "https://secure.bharatmatrimony.com" + self.requestUrl
                 self.pageRequest = urllib2.Request(self.requestUrl, None, self.httpHeaders)
+                print "Redirecting to '%s'\n\n"%self.requestUrl
             else:
                 self.currentPageContent = self.__class__._decodeGzippedContent(self.getPageContent())
                 return(self.currentPageContent)
@@ -155,7 +159,7 @@ if __name__ == "__main__":
         ff = open("../html/bharatmatrimony.html", "w")
         ff.write(pageContent)
         ff.close()
-    if not bhm.assertLogin("Sign Out"):
+    if not bhm.assertLogin("Delete Profile"): # This text ("Delete Profile") is only available when the user is logged in.
         print "Could not log in"
         sys.exit()
     else:
