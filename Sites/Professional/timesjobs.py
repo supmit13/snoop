@@ -20,28 +20,53 @@ class TimesJobs(Crawler):
         self.__class__.DEBUG = True
         super(TimesJobs, self).__init__("../../conf/snoop.cnf", "http://hire.timesjobs.com/index.html", "http://hire.timesjobs.com/index.html")
         self.availableCreds = self.loadCredentials("timesjobs")
-        responseHeaders = self.pageResponse.info()
-        if not responseHeaders.has_key('Location'):
-            print "Could not find the redirection URL to go to the login page.\n"
-            return(None)
-        self.httpHeaders['Referer'] = self.requestUrl
-        self.requestUrl = responseHeaders['Location']
-        self.pageRequest = urllib2.Request(self.requestUrl, None, self.httpHeaders)
-        try:
-            self.pageResponse = self.no_redirect_opener.open(self.pageRequest)
-            self.sessionCookies = self.__class__._getCookieFromResponse(self.pageResponse)
-            self.httpHeaders["Cookie"] = self.httpHeaders["Cookie"].__str__() + self.sessionCookies.__str__()
-            self._processCookie()
-        except:
-            print "Could not fetch the login page.\n"
-            return(None)
-        self.currentPageContent = self.__class__._decodeGzippedContent(self.getPageContent())
-        return (self.currentPageContent)
-
+        ff = open("dumptj.html", "w")
+        ff.write(self.currentPageContent)
+        ff.close()
+        
 
     def doLogin(self, username="", password=""):
         html = self.currentPageContent
         soup = BeautifulSoup(html)
+        loginForm = soup.find("form") # There is only one form on the page.
+        loginAction = loginForm['action']
+        loginMethod = loginForm['method']
+        if not self.__class__._isAbsoluteUrl(loginAction):
+            loginAction = self.baseUrl + "/" + loginAction
+        self.requestUrl = loginAction
+        usernameFieldname = loginForm.find("input", {'type' : 'text'})
+        passwordFieldname = loginForm.find("input", {'type' : 'password'})
+        allHiddenFields = loginForm.findAll("input", {'type' : 'hidden'})
+        
+        self.postData = {}
+        credsLen = self.availableCreds.__len__()
+        randomIndex = random.randint(0, credsLen - 1)
+        tjUsernames = self.availableCreds.keys()
+        self.siteUsername = tjUsernames[randomIndex]
+        self.sitePassword = self.availableCreds[self.siteUsername]
+        self.postData = { usernameFieldname : self.siteUsername, passwordFieldname : self.sitePassword }
+        for hiddenfld in allHiddenFields:
+            if hiddenfld.has_key('name') and hiddenfld.has_key('value'):
+                self.postData[hiddenfld['name']] = hiddenfld['value']
+        encodedData = urllib.urlencode(self.postData)
+        self.pageRequest = urllib2.Request(self.requestUrl, encodedData, self.httpHeaders)
+        while True:
+            try:
+                self.pageResponse = self.no_redirect_opener.open(self.pageRequest)
+                self.sessionCookies = self.__class__._getCookieFromResponse(self.pageResponse)
+                self.httpHeaders["Cookie"] = self.httpHeaders["Cookie"].__str__() + self.sessionCookies.__str__()
+                self._processCookie()
+                self.httpHeaders['Referer'] = self.requestUrl
+            except:
+                print "Failed to send request to '%s'\n"%self.requestUrl
+                return(None)
+            responseHeaders = self.pageResponse.info()
+            if responseHeaders.has_key('Location'):
+                self.requestUrl = responseHeaders['Location']
+                self.pageRequest = urllib2.Request(self.requestUrl, None, self.httpHeaders)
+            else: # Returned with code 200
+                self.currentPageContent = self.__class__._decodeGzippedContent(self.getPageContent())
+                return (self.currentPageContent)
 
 
     def conductSearch(self, searchEntity):
@@ -97,7 +122,7 @@ if __name__ == "__main__":
     searchEntity = sys.argv[1]
     tj = TimesJobs()
     pageContent = tj.doLogin()
-    if not tj.assertLogin("Logout"):
+    if not tj.assertLogin(tj.siteUsername):
         print "Could not log in. Username: %s, Password: %s\n"%(tj.siteUsername, tj.sitePassword)
         sys.exit()
     else:
