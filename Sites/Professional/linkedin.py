@@ -64,7 +64,7 @@ class LinkedIn(Crawler):
         try:
             self.pageResponse = self.no_redirect_opener.open(self.pageRequest)
             self.sessionCookies = self.__class__._getCookieFromResponse(self.pageResponse)
-            self.httpHeaders["Cookie"] += self.sessionCookies
+            self.httpHeaders["Cookie"] += self.sessionCookies,
             responseHeaders = self.pageResponse.info()
             if responseHeaders.has_key('Location'):
                 self.requestUrl = responseHeaders['Location']
