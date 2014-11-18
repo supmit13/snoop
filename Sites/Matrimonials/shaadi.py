@@ -173,7 +173,7 @@ if __name__ == "__main__":
         ff = open("../html/shaadilogin.html", "w")
         ff.write(pageContent)
         ff.close()
-    if not shd.assertLogin("<div title=\"Logged in as: "):
+    if not shd.assertLogin("<div title=\"Logged in as: ") and not shd.assertLogin("I'll do this later"):
         print "Could not log in"
         sys.exit()
     else:

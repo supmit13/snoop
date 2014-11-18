@@ -29,6 +29,6 @@ urlslist = http://cidtunnel.info,http://boxproxy.info, http://browserusa.com, ht
 credsfile=../../conf/prettycreds.cnf
 
 [SearchEngines]
-googlelistingdepth=10
-yahoolistingdepth=10
+googlelistingdepth=5
+yahoolistingdepth=5
 binglistingdepth=5
