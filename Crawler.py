@@ -247,6 +247,58 @@ class Crawler(object):
     def doLogin(self, username="", password=""):
         pass
 
+
+    def _processCookie(self):
+        """
+        Method to remove extra semicolons and repeatitive keys in cookies. To be used internally.
+        """
+        self.sessionCookies = self.httpHeaders['Cookie']
+        cookies = self.sessionCookies.split(";")
+        cookiesDict = {}
+        for cookie in cookies:
+            cookie = re.sub(re.compile(r"\s+$"), "", cookie)
+            cookie = re.sub(re.compile(r"^\s+"), "", cookie)
+            cookie = re.sub(self.__class__.multipleWhiteSpacesPattern, "", cookie)
+            if cookie == "":
+                continue
+            elif re.search(re.compile(r"Max\-Age=\-"), cookie) or re.search(re.compile(r"=deleted"), cookie):
+                continue
+            else:
+                cookieparts = cookie.split("=")
+                cookiesDict[cookieparts[0]] = cookieparts[1]
+        self.sessionCookies = ""
+        for cookie in cookiesDict.keys():
+            self.sessionCookies += cookie + "=" + cookiesDict[cookie] + ";"
+        self.httpHeaders['Cookie'] = self.sessionCookies
+        return(self.sessionCookies)
+
+
+    def getPage(self, url):
+        self.requestUrl = url
+        if not self.__class__._isAbsoluteUrl(self.requestUrl):
+            self.requestUrl = self.baseUrl + self.requestUrl
+        self.pageRequest = urllib2.Request(self.requestUrl, None, self.httpHeaders)
+        while True:
+            try:
+                self.pageResponse = self.no_redirect_opener.open(self.pageRequest)
+                self.sessionCookies = self.__class__._getCookieFromResponse(self.pageResponse)
+                self.httpHeaders["Cookie"] = self.httpHeaders["Cookie"].__str__() + self.sessionCookies.__str__()
+                self._processCookie()
+                self.httpHeaders['Referer'] = self.requestUrl
+                responseHeaders = self.pageResponse.info()
+                if responseHeaders.has_key('Location'):
+                    self.requestUrl = responseHeaders['Location']
+                    self.pageRequest = urllib2.Request(self.requestUrl, None, self.httpHeaders)
+                else:
+                    self.currentPageContent = self.__class__._decodeGzippedContent(self.getPageContent())
+                    break
+            except:
+                print "Error trying to retrieve page pointed to by '%s' - %s\n"%(self.requestUrl, sys.exc_info()[1].__str__())
+                return(None)
+        return(self.currentPageContent)
+
+
+
     def _getLoginFormElementsDict(self):
         pass
 
@@ -260,7 +312,7 @@ class Crawler(object):
     sanitizePageHTML = classmethod(sanitizePageHTML)
     """
 
-    def parseSearchHtml(self):
+    def parsePageHtml(self):
         """
         Parses the HTML content in the object's currentPageContent attribute and sets the
         object's 'searchResults' attribute with the resultant dict. Returns the number of

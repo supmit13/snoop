@@ -242,13 +242,67 @@ class Facebook(Crawler):
         pass
 
 
-    def parseSearchHtml(self):
+    def parsePageHtml(self):
         """
         Parses the HTML content in the object's currentPageContent attribute and sets the
         object's 'searchResults' attribute with the resultant dict. Returns the number of
         matches found.
         """
-        pass
+        html = self.currentPageContent
+        soup = BeautifulSoup(html)
+        allSpans = soup.findAll("span")
+        pageUrl, gender, interests, languages, mobilephone, email,address = "", "", "", "", "", "",""
+        for span in allSpans:
+            spanContent = span.renderContents()
+            if spanContent != "Contact Information":
+                continue
+            spanNext = span.findNext("span")
+            spanNextText = spanNext.renderContents()
+            spanNext2 = spanNext
+            if spanNextText == "Mobile Phones":
+                spanNext2 = spanNext.findNext("span")
+                mobilephone = spanNext2.renderContents()
+            spanNext2 = spanNext2.findNext("span")
+            spanNext2Text = spanNext2.renderContents()
+            while spanNext2Text != "Address":
+                spanNext2 = spanNext2.findNext("span")
+                spanNext2Text = spanNext2.renderContents()
+                spanNext2Text = spanNext2Text.strip()
+            spanNext3 = spanNext2.findNext("span")
+            if spanNext3 is not None:
+                address = spanNext3.renderContents()
+            spanNext4 = spanNext3.findNext("span")
+            while spanNext4.renderContents() != "Email":
+                spanNext4 = spanNext4.findNext("span")
+            spanNext4 = spanNext4.findNext("span")
+            email = spanNext4.renderContents()      
+
+        for span in allSpans:
+            spanContent = span.renderContents()
+            if spanContent != "Basic Information":
+                continue
+            if spanContent == "Basic Information":
+                spanNext = span.findNext("span")
+                spanNextText = spanNext.renderContents()
+                while spanNextText != "Gender":
+                    spanNext = spanNext.findNext("span")
+                    spanNextText = spanNext.renderContents()
+                spanNext2 = spanNext.findNext("span")
+                gender = spanNext2.renderContents()
+                spanNext3 = spanNext2.findNext("span")
+                if spanNext3.renderContents() == "Interested In":
+                    spanNext3 = spanNext3.findNext("span")
+                    interests = spanNext3.renderContents()
+                spanNext4 = spanNext3.findNext("span")
+                while spanNext4.renderContents() != "Languages":
+                    spanNext4 = spanNext4.findNext("span")
+                spanNext4 = spanNext4.findNext("span")
+                languages = spanNext4.renderContents()
+        mobilephone = re.sub(self.__class__.htmlTagPattern, "", mobilephone)
+        address = re.sub(self.__class__.htmlTagPattern, "", address)
+        email = re.sub(self.__class__.htmlTagPattern, "", email)
+        info = {'mobile' : mobilephone, 'address' : address, 'email' : email, 'gender' : gender, 'interests' : interests, 'languages' : languages }
+        return(info)
 
 
 

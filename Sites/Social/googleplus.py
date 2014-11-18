@@ -89,7 +89,7 @@ class GooglePlus(Crawler):
             fldname = fldname.encode('utf-8')
             fldvalue = fldvalue.encode('utf-8')
             if fldname == 'checkConnection':
-                fldvalue = "youtube:574:1"
+                fldvalue = "youtube:1177:0"
             if fldname == 'pstMsg':
                 fldvalue = '1'
             #if fldname == 'bgresponse':
@@ -113,6 +113,7 @@ class GooglePlus(Crawler):
         httpHeaders[':version'] = "HTTP/1.1"
         httpHeaders['origin'] = "https://accounts.google.com"
         httpHeaders['content-length'] = encodedData.__len__()
+        httpHeaders['accept-encoding'] = 'gzip,deflate,sdch'
 
         self.requestUrl = loginAction
         if self.requestUrl is not None:
@@ -147,6 +148,7 @@ class GooglePlus(Crawler):
             httpHeaders.pop("origin", None)
         if httpHeaders.has_key("accept-charset"):
             httpHeaders.pop("accept-charset", None)
+        httpHeaders['allow-chrome-signin'] = '1'
 
         self.pageRequest = urllib2.Request(self.requestUrl, None, httpHeaders)
         print httpHeaders
