@@ -1,0 +1,21 @@
+Refer to links listed below to identify means (if any) to locate a given mobile number:
+
+1. "http://dq.sdc.bsnl.co.in/bsnl-web/residentialSearch.seam"
+
+2. "http://www.bsnl.co.in/opencms/bsnl/BSNL/directory_services/online_telephone_directory.html"
+
+3. "http://www.tracephonenumber.in/"
+
+4. "http://www.tracephonenumber.in/how-to/track-stolen-phone/"
+
+5. "http://www.indiacom.com/yellowpage/telephonedirectories.asp"
+
+6. "https://dir.yahoo.com/regional/countries/india/reference/phone_numbers_and_addresses/"
+
+7. "https://developer.android.com/google/gcm/gs.html"
+
+
+
+
+Understand and identifying metrics for business intelligence - look at the various apps in several categories like "Mobile Reporting", "Phonecall Tracking", "Dashboard and Visualization" etc: "http://www.google.com/analytics/partners/search/apps?category=113"
+Also look at wigle website: "https://wigle.net/map?maplat=41.8815&maplon=-87.637&mapzoom=13&startTransID=20010000-00000&endTransID=20150000-00000" and "https://wigle.net/phpbb/viewtopic.php?p=8243"
