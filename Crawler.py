@@ -353,5 +353,14 @@ class Crawler(object):
         self.__isLoggedIn = False
         return (0)
 
+
+    def logout(self):
+        """
+        Log the user out only if the user is logged in (that is, the method will check self.__isLoggedIn value and will
+        try to perform the logout procedure if self.__isLoggedIn == True.
+        """
+        pass
+    
+
     if __name__ == "__main__":
         pass

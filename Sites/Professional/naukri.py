@@ -74,6 +74,7 @@ class Naukri(Crawler):
             print "Could not make the redirection request successfully. Error: %s\n"%sys.exc_info()[1].__str__()
             return(None)
         self.currentPageContent = self.__class__._decodeGzippedContent(self.getPageContent())
+        self.__isLoggedIn = True
         return (self.currentPageContent)
 
 

@@ -64,7 +64,7 @@ class LinkedIn(Crawler):
         try:
             self.pageResponse = self.no_redirect_opener.open(self.pageRequest)
             self.sessionCookies = self.__class__._getCookieFromResponse(self.pageResponse)
-            self.httpHeaders["Cookie"] += self.sessionCookies,
+            self.httpHeaders["Cookie"] = self.httpHeaders["Cookie"].__str__() + self.sessionCookies.__str__()
             responseHeaders = self.pageResponse.info()
             if responseHeaders.has_key('Location'):
                 self.requestUrl = responseHeaders['Location']
@@ -72,7 +72,7 @@ class LinkedIn(Crawler):
                 print "Could not find redirection URL during logging in. Giving up...\n"
                 return None
         except:
-            print "Failed while making the POST request to login. Giving up...\n"
+            print "Failed while making the POST request to login. Giving up due to '%s'...\n"%sys.exc_info()[1].__str__()
             return None
         self._processCookie()
         
